@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}#chat{position:absolute;left:12px;bottom:130px;width:min(320px,70vw);pointer-events:none;z-index:6;font:700 13px sans-serif}#chl{display:flex;flex-direction:column;gap:3px;max-height:150px;overflow:hidden;justify-content:flex-end}#chl div{background:rgba(10,12,24,.72);color:#fff;padding:4px 8px;border-radius:8px;word-break:break-word;transition:opacity .6s}#chl div b{color:#ffcf4a}#chl div.o{opacity:0}#chat.on #chl div.o{opacity:1}#chi{display:none;pointer-events:auto;margin-top:4px;width:100%;box-sizing:border-box;padding:7px 9px;border-radius:8px;border:2px solid #ffcf4a;background:#10131f;color:#fff;font:700 14px sans-serif}#chat.on #chi{display:block}
-</style><link rel="icon" type="image/png" href="apple-touch-icon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body>
+</style><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Bides World"><meta name="theme-color" content="#12131c"><link rel="icon" type="image/png" href="apple-touch-icon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body>
 <title>Patchwork Panic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,6 +81,19 @@ button{font-family:inherit;cursor:pointer}
 .sr i{font-style:normal;letter-spacing:2px;color:var(--gold)}.sr i u{text-decoration:none;color:#444a63}
 #ready{background:#3ddc7a;color:#0c2a16;border:3px solid #000;border-radius:12px;padding:10px 16px;font-size:18px;font-weight:800;font-family:inherit;align-self:center}#note b{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#7a5a2a}#note span{font-size:17px;line-height:1.45;font-weight:800}#note i{font-style:normal;font-size:12px;color:#7a5a2a}
 @media(pointer:coarse){#fix{display:block}}
+body{overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}input{-webkit-user-select:text;user-select:text}
+@media (max-width:700px),(max-height:520px){
+#fl{font-size:15px;line-height:1}#bar,#prog{width:min(380px,100%)}#bar{padding:3px 8px}#b1{font-size:16px}#b2{font-size:11px;padding-top:0}#prog{height:8px}#pt{font-size:10px}#top{gap:2px;padding:0 8px}
+#ctl{right:6px;top:6px;gap:4px}#ctl button{padding:4px 7px;font-size:11px}
+#bl{left:6px;bottom:6px;gap:4px;width:min(176px,46vw)}.box{padding:3px 7px}#gr{font-size:14px;min-width:0}#hr{font-size:17px;letter-spacing:1px}#stam{font-size:11px}
+#fix{right:10px;bottom:16px;width:78px;height:78px;font-size:17px}#run{right:96px;bottom:22px;width:64px;height:64px;font-size:14px}
+#pick{right:10px;bottom:102px;width:72px;height:72px;font-size:13px}#flt,#slb{right:96px;bottom:92px;width:72px;height:72px;font-size:11px}
+#slots{left:6px;transform:none;bottom:104px;gap:4px}#slots button{min-width:52px;padding:5px 6px;font-size:11px}#slots img{width:18px;height:18px;margin-right:2px}
+#chat{bottom:146px;left:6px;width:min(250px,56vw);font-size:12px}#note{bottom:90px}
+body:has(#lob:not([hidden])) #bl{display:none}#lob .lbtns{margin-bottom:96px}#lob .lbtns button{font-size:14px;padding:8px 10px}
+}
+@media (max-width:700px) and (orientation:portrait){#top{top:34px}}
+@media (max-height:520px) and (orientation:landscape){#top{top:2px}}
 </style>
 <canvas id="gl"></canvas><canvas id="c"></canvas>
 <div id="hud">
@@ -1003,7 +1016,7 @@ function render(t){
 let mmC=null,mmG=null,mmOn=true;
 function mmDraw(){try{if(S!='play'||!mmOn||!g||!ms)return;if(mmG!==g){mmG=g;mmC=document.createElement('canvas');mmC.width=W;mmC.height=H}
  const q=mmC.getContext('2d'),pi=p.x/T,pj=p.y/T,rr=9;for(let j=Math.max(0,Math.floor(pj-rr));j<=Math.min(H-1,Math.ceil(pj+rr));j++)for(let i=Math.max(0,Math.floor(pi-rr));i<=Math.min(W-1,Math.ceil(pi+rr));i++){if(Math.hypot(i-pi,j-pj)>rr)continue;const v=g[j][i];q.fillStyle=(v==1||v==4)?'#8aa0c0':'#262b3f';q.fillRect(i,j,1,1)}
- const s=vw<700?.7:1.1,w=W*s,h=H*s,x=vw-w-12,y=52;ox.save();ox.globalAlpha=.88;ox.fillStyle='rgba(8,10,20,.8)';ox.fillRect(x-3,y-3,w+6,h+6);ox.imageSmoothingEnabled=false;ox.drawImage(mmC,x,y,w,h);ox.globalAlpha=1;
+ const sm2=Math.min(vw,vh)<520,s=sm2?.7:1.1,w=W*s,h=H*s,x=vw-w-8,y=sm2?(vh>vw?124:40):52;ox.save();ox.globalAlpha=.88;ox.fillStyle='rgba(8,10,20,.8)';ox.fillRect(x-3,y-3,w+6,h+6);ox.imageSmoothingEnabled=false;ox.drawImage(mmC,x,y,w,h);ox.globalAlpha=1;
  const dot=(cx2,cy2,c,r)=>{ox.fillStyle=c;ox.beginPath();ox.arc(x+cx2/T*s,y+cy2/T*s,r,0,7);ox.fill()};
  for(const m of ms)dot(m.x,m.y,m.d?'#5cff9a':'#ff5a4a',3);if(lift)dot(lift.x,lift.y,lift.open?'#ffcf4a':'#7a8099',3.5);
  const near=(o,c)=>{if(o&&Math.hypot(o.x-p.x,o.y-p.y)<T*10)dot(o.x,o.y,c,3)};near(e,'#ff2d55');if(fl>=3)near(e3,'#ff2d55');for(const q2 of twa||[])near(q2,'#ff2d55');if(kk)near(kk,'#ff2d55');
