@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}#chat{position:absolute;left:12px;bottom:130px;width:min(320px,70vw);pointer-events:none;z-index:6;font:700 13px sans-serif}#chl{display:flex;flex-direction:column;gap:3px;max-height:150px;overflow:hidden;justify-content:flex-end}#chl div{background:rgba(10,12,24,.72);color:#fff;padding:4px 8px;border-radius:8px;word-break:break-word;transition:opacity .6s}#chl div b{color:#ffcf4a}#chl div.o{opacity:0}#chat.on #chl div.o{opacity:1}#chi{display:none;pointer-events:auto;margin-top:4px;width:100%;box-sizing:border-box;padding:7px 9px;border-radius:8px;border:2px solid #ffcf4a;background:#10131f;color:#fff;font:700 14px sans-serif}#chat.on #chi{display:block}
-</style><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Bides World"><meta name="theme-color" content="#12131c"><link rel="icon" type="image/png" href="apple-touch-icon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body>
+</style><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Bides World"><meta name="theme-color" content="#12131c"><link rel="icon" type="image/png" href="apple-touch-icon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body>
 <title>Patchwork Panic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,9 +90,9 @@ body{overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-
 #pick{right:10px;bottom:102px;width:72px;height:72px;font-size:13px}#flt,#slb{right:96px;bottom:92px;width:72px;height:72px;font-size:11px}
 #slots{left:6px;transform:none;bottom:104px;gap:4px}#slots button{min-width:52px;padding:5px 6px;font-size:11px}#slots img{width:18px;height:18px;margin-right:2px}
 #chat{bottom:146px;left:6px;width:min(250px,56vw);font-size:12px}#note{bottom:90px}
-body:has(#lob:not([hidden])) #bl{display:none}#lob .lbtns{margin-bottom:96px}#lob .lbtns button{font-size:14px;padding:8px 10px}
+body:has(#lob:not([hidden])) #bl{display:none}#lob .lbtns{margin-bottom:4px}#lob .lbtns button{font-size:14px;padding:8px 10px}
 }
-@media (max-width:700px) and (orientation:portrait){#top{top:34px}}
+@media (max-width:700px) and (orientation:portrait){#top{top:34px}#lob .lbtns{margin-bottom:96px}}
 @media (max-height:520px) and (orientation:landscape){#top{top:2px}}
 </style>
 <canvas id="gl"></canvas><canvas id="c"></canvas>
