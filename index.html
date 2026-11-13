@@ -140,12 +140,13 @@ const maxhp=()=>ST.hp;let runBtn=false;
 const TOONS=[{id:'lov',n:'Abbas',cost:0,res:0,d:'The free starter bird. Balanced.',ab:'',s:{h:3,v:3,s:3,q:3,r:3,k:3},pal:{lb:1,b:0x4f8a3c,h:0x5a9a44,w:0x3a6e2e,f:0x9cc965,bk:0x35302a,lg:0x7a6a5a}},{id:'kak',n:'Kakeeke',cost:0,res:0,d:'ADMIN. Super fast, huge skill checks, endless stamina. Very loud though. Admin panel only.',ab:'Admin: wobbly walk.',s:{h:20,v:20,s:20,q:1,r:20,k:20},pal:{kk:1,b:0x85531a,h:0xfff200,w:0x85531a,f:0x050505,bk:0xfff200,lg:0x85531a}},{id:'pip',n:'Puffy',cost:1200,res:0,d:'Calm and balanced.',ab:'Generator Rush: fixing a generator gives you a 6 second speed boost.',s:{h:3,v:4,s:4,q:2,r:3,k:3},pal:null},{id:'lut',n:'Cookie',cost:600,res:0,d:'A quiet cockatiel. Hard to hear.',ab:'',s:{h:3,v:3,s:3,q:4,r:2,k:3},pal:{ck:1,b:0xf6f1e0,h:0xe9e06a,w:0xefe8d0,f:0xfffaf0,bk:0xe8e8ee,lg:0xe0a8a8}},{id:'snw',n:'Snowflake',cost:400,res:0,d:'A white cockatiel. Quick and light on his feet.',ab:'',s:{h:3,v:4,s:3,q:3,r:2,k:3},pal:{ck:1,b:0xf6f1e0,h:0xfbf7ee,w:0xf3eee0,f:0xfffaf0,bk:0xe8a0a0,lg:0xe0a8a8,ch:0xfaf5ec,cc:0xf0b4b0,ey:0x0a0a0c}},{id:'lem',n:'Lemon',cost:0,res:0,d:'A rainbow lorikeet. Balanced all-rounder.',ab:'Panic Gulp: when panic starts, regain 50% of your stamina (once every 12 seconds).',s:{h:3,v:3,s:3,q:3,r:3,k:3},pal:{lk:1,b:0x2f7a3a,h:0x2a3fa8,w:0x23803a,f:0xe8742a,bk:0xe8641a,lg:0x8a7a6a}},{id:'suk',n:'Sukar',cost:500,res:0,d:'A tiny pastel-blue lovebird. Super quick and quiet, but slow at generators and has small skill checks. Always repairs a machine in 20 seconds.',ab:'Dash: press the DASH button (or G) to speed along and move 55% faster for 3.5 seconds. Puddles do not slow you and running costs no stamina. 30 second cooldown.',sz:.72,t20:1,stm:8.75,s:{h:3,v:4,s:4,q:3,r:2,k:2},pal:{lb:1,nc:1,fc:0xf6f2ec,b:0x72b8c8,h:0xf6f2ec,w:0x4f93ae,f:0xf1eee8,bk:0xe9b4a4,lg:0xb9aab6}},
 {id:'slv',n:'Silver',cost:1000,res:0,d:'A calm grey-blue lovebird. Fast at generators with solid skill checks, movement and stamina, but easy to spot.',ab:'Silver Throw: tap the SILVER button (or G). Aim locks onto the closest twisted and Silver throws a pile of silver that never misses and freezes it for 5 seconds. 25 second cooldown.',s:{h:3,v:3,s:3,q:1,r:4,k:3},pal:{lb:1,nc:1,fc:0xd3d7de,b:0x8a95a7,h:0xd7dbe2,w:0x667286,f:0xcfd3da,bk:0xe3aaa5,lg:0x9a8f9a}},
 {id:'lgt',n:'Lightning',cost:2000,res:0,enc:4,d:'A grey cockatiel with a bright yellow face. The best at generators, but his skill checks are tiny and his stamina is low.',ab:'Footprint Vision: you can see glowing footprints left by every twisted, even through walls. They fade after 6 seconds. Always on.',stm:6.25,s:{h:3,v:3,s:2,q:2,r:5,k:1},pal:{ck:1,wp:1,b:0x6b6d75,h:0xf0dd4c,w:0x5d5f68,f:0x8c8e96,bk:0xe9b4b4,lg:0xe0a0a2,ey:0x15151c}}];
+if(sv.all)TOONS.forEach(t=>{if(!sv.toons.includes(t.id))sv.toons.push(t.id)});
 const TRK=[{id:'btn',n:'Lucky Button',cost:80,d:'Wider skill-check zone.'},{id:'slp',n:'Soft Slippers',cost:70,d:'You make less noise.'},{id:'spr',n:'Spare Spring',cost:90,d:'More stamina.'},{id:'lit',n:'Night Light',cost:100,d:'See further in the dark.'},{id:'fan',n:'Pocket Fan',cost:110,d:'Generators repair faster.'},{id:'whs',n:"Puffy's Whistle",cost:90,only:'pip',d:'Generator Rush lasts 9 seconds.'},{id:'pch',n:'Seed Pouch',cost:80,only:'pip',d:'Capsules give 1 extra seed.'},{id:'swf',n:'Swift Sneakers',cost:120,d:'You run a little faster.'},{id:'hrt',n:'Heart Locket',cost:150,d:'One extra heart.'},{id:'gfe',n:'Golden Feather',cost:130,d:'Each generator gives 2 extra seeds.'},{id:'scf',n:'Sneak Scarf',cost:100,only:'lut',d:'You make even less noise.'},{id:'clw',n:'Quick Claws',cost:110,only:'lut',d:'Generators repair faster.'}];
 const hasT=i=>{const t=TRK.find(x=>x.id==i);return t&&sv.eq.includes(i)&&(!t.only||t.only==sv.sel)};
 const ITEMS=[{id:'candy',n:'Speed Candy',cost:30,d:'Speed up for 6 seconds.'},{id:'patch',n:'Patch Kit',cost:50,d:'Heals one heart.'},{id:'wrench',n:'Fix Wrench',cost:100,d:'Instantly fixes the nearest generator.'}];
 const SKINS=[{id:'',n:'Default',d:'Your bird as it is.'},{id:'king',n:'1st bird',d:'Gold crown, red cape and a King leg band. Puffy only.'}];
-function fixStarter(){const s0=sv.starter=='lem'?'lem':'lov',o=s0=='lem'?'lov':'lem';sv.toons=sv.toons.filter(x=>x!=o);if(!sv.toons.includes(s0))sv.toons.push(s0);if(!sv.toons.includes(sv.sel)||sv.sel==o)sv.sel=s0}
-function computeST(){const t=TOONS.find(x=>x.id==sv.sel)||TOONS[0],s=t.s,has=hasT;ST={hp:Math.max(2,s.h)+(has('hrt')?1:0),spd:1.05+.07*s.v+(t.id=='pip'?.1:0)+(has('swf')?.05:0),stam:(1.2+.6*s.s+(has('spr')?.6:0))*2.5,quiet:Math.max(.1,(1.3-.1*s.q)*(has('slp')?.85:1)*(has('scf')?.85:1)),rep:.7+.1*s.r+(has('fan')?.12:0)+(has('clw')?.15:0),chk:.7+.1*s.k+(has('btn')?.15:0),light:has('lit')?1.35:1,fx:0};if(t.id=='kak'){ST.spd=3;ST.stam=3136314463.6;ST.fx=0}else ST.rep*=.7;if(t.t20)ST.t20=1;if(t.stm)ST.stam=t.stm+(has('spr')?1.5:0);ST.spd*=admSpd}
+function fixStarter(){const s0=sv.starter=='lem'?'lem':'lov',o=s0=='lem'?'lov':'lem';if(!sv.all)sv.toons=sv.toons.filter(x=>x!=o);if(!sv.toons.includes(s0))sv.toons.push(s0);if(!sv.toons.includes(sv.sel)||(sv.sel==o&&!sv.all))sv.sel=s0}
+function computeST(){const t=TOONS.find(x=>x.id==sv.sel)||TOONS[0],s=t.s,has=hasT;ST={hp:Math.max(2,s.h)+(has('hrt')?1:0),spd:1.26*(10+2.5*(s.v-1))/15+(t.id=='pip'?.1:0)+(has('swf')?.05:0),rn:1.26*(20+2.5*(s.v-1))/25+(t.id=='pip'?.1:0)+(has('swf')?.05:0),stam:(1.2+.6*s.s+(has('spr')?.6:0))*2.5,quiet:Math.max(.1,(1.3-.1*s.q)*(has('slp')?.85:1)*(has('scf')?.85:1)),rep:.7+.1*s.r+(has('fan')?.12:0)+(has('clw')?.15:0),chk:.7+.1*s.k+(has('btn')?.15:0),light:has('lit')?1.35:1,fx:0};if(t.id=='kak'){ST.spd=3;ST.rn=3;ST.stam=3136314463.6;ST.fx=0}else ST.rep*=.7;if(t.t20)ST.t20=1;if(t.stm)ST.stam=t.stm+(has('spr')?1.5:0);ST.spd*=admSpd;ST.rn*=admSpd}
 function setToon(){const t=TOONS.find(x=>x.id==sv.sel)||TOONS[0];sc.remove(pipg);if(t.id=='kak'){pipg=kkBody();pipg.scale.set(.62,.62,.62)}else{pipg=makeBird(false,t.pal,sv.skin);{const z=t.sz||.85;pipg.scale.set(z,z,z)}}sc.add(pipg)}
 const ICO={};
 function itemImg(id){if(ICO[id])return ICO[id];const c=document.createElement('canvas');c.width=c.height=64;const q=c.getContext('2d');q.lineJoin='round';q.lineWidth=3;q.strokeStyle='#5a1535';
@@ -190,7 +191,7 @@ function encOk(t){return((sv.enc||{})[t.id]||0)>=(t.enc||0)}
 function rLobby(){
  $('lgb').textContent='Seeds: '+bank+'  ·  Research: '+(sv.res||0);
  $('lit').innerHTML=ITEMS.map(it=>`<div class='row2'><div><b>${it.n}</b><span>${it.d}</span></div><button data-k='i' data-id='${it.id}'${bank<it.cost||freeSlot()<0?' disabled':''}>${freeSlot()<0?'Bag full':it.cost}</button></div>`).join('');
- $('ltoon').innerHTML=TOONS.filter(t=>t.id!='lov'&&t.id!='kak'&&t.id!='lem').map(t=>{const own=sv.toons.includes(t.id),c=t.pal?t.pal.b:0x4f9bec;return `<div class='tc${vt==t.id?' sel':''}' data-k='t' data-id='${t.id}'><img class='bi' src='${birdImg(t.pal)}'>${t.n}${own?'':'<br><span style="color:#ffcf4a">'+t.cost+' seeds'+(t.res?' + '+t.res+' research':'')+'</span>'+(t.enc?'<br><span style="color:#9ad">Twisted '+t.n+' '+Math.min(t.enc,(sv.enc||{})[t.id]||0)+'/'+t.enc+'</span>':'')}</div>`}).join('');
+ $('ltoon').innerHTML=TOONS.filter(t=>sv.all||(t.id!='lov'&&t.id!='kak'&&t.id!='lem')).map(t=>{const own=sv.toons.includes(t.id),c=t.pal?t.pal.b:0x4f9bec;return `<div class='tc${vt==t.id?' sel':''}' data-k='t' data-id='${t.id}'><img class='bi' src='${birdImg(t.pal)}'>${t.n}${own?'':'<br><span style="color:#ffcf4a">'+t.cost+' seeds'+(t.res?' + '+t.res+' research':'')+'</span>'+(t.enc?'<br><span style="color:#9ad">Twisted '+t.n+' '+Math.min(t.enc,(sv.enc||{})[t.id]||0)+'/'+t.enc+'</span>':'')}</div>`}).join('');
  const t=TOONS.find(x=>x.id==vt)||TOONS[0],own=sv.toons.includes(t.id),s=t.s;
  $('lst').innerHTML=`<img class='bi big' src='${birdImg(t.pal)}'><b>${t.n}</b> <span style='color:#b9bdd6;font-size:12px'>${t.d}</span><br><span style='color:#5ce0b0;font-size:12px'>${own?'':'(Locked until you buy this bird) '}${t.ab||''}</span><div class='sr'><span>Health</span><i>${st5(s.h)}</i><span>Speed</span><i>${st5(s.v)}</i><span>Stamina</span><i>${st5(s.s)}</i><span>Stealth</span><i>${st5(s.q)}</i><span>Repair</span><i>${st5(s.r)}</i><span>Skill check</span><i>${st5(s.k)}</i></div><button class='go2' data-k='e'${own&&sv.sel==t.id||!own&&(bank<t.cost||(sv.res||0)<(t.res||0)||!encOk(t))?' disabled':''}>${own?(sv.sel==t.id?'Equipped':'Equip'):(!own&&!encOk(t)?'Meet Twisted '+t.n+' '+Math.min(t.enc,(sv.enc||{})[t.id]||0)+'/'+t.enc+' times':'Buy for '+t.cost+' seeds'+(t.res?' + '+t.res+' research':''))}</button>`;
  $('lsk').innerHTML=(sv.sel!='pip'?`<div class='row2'><div><b>Skins are for Puffy</b><span>Equip Puffy to wear the 1st bird skin.</span></div></div>`:'')+(()=>{const i0=sv.starter=='lem'?'lem':'lov',t0=TOONS.find(x=>x.id==i0);return `<div class='row2${sv.sel==i0?' on':''}'><div><b>${t0.n}</b><span>Your free starter bird (not sold in the stand).</span></div><button data-k='ab' data-id='${i0}'>${sv.sel==i0?'Using':'Use'}</button></div>`})()+(sv.sel!='pip'?'':SKINS.map(k2=>`<div class='row2${(sv.skin||'')==k2.id?' on':''}'><div><b>${k2.n}</b><span>${k2.d}</span></div><button data-k='sk' data-id='${k2.id||'none'}'>${(sv.skin||'')==k2.id?'Wearing':'Wear'}</button></div>`).join(''));
@@ -229,25 +230,29 @@ $('shopbtn').onclick=()=>setShop(!shopOpen);
 const setParty=d=>{sv.party=Math.min(8,Math.max(1,(sv.party||1)+d));$('pn2').textContent=sv.party;save();lbSig=''};$('pm').onclick=()=>setParty(-1);$('pp').onclick=()=>setParty(1);
 ['s0','s1','s2'].forEach((id,i)=>{$(id).onclick=()=>useItem(i)});
 let mus=null,musN=[];
-function musicStart(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(mus)return;if(ac.state=='suspended')ac.resume();
- const hz=m=>440*Math.pow(2,(m-69)/12),SP=60/150/2,R=[40,40,43,38,40,40,45,43],sh=ac.createWaveShaper(),cv=new Float32Array(1024);for(let k=0;k<1024;k++){const x=k/512-1;cv[k]=Math.tanh(x*3.5)}sh.curve=cv;
- const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3200;const gb=ac.createGain();gb.gain.value=.4;sh.connect(lp);lp.connect(gb);const out=ac.createDynamicsCompressor();out.threshold.value=-18;out.ratio.value=6;out.attack.value=.003;out.release.value=.2;const mg=ac.createGain();mg.gain.value=.8;out.connect(mg);mg.connect(ac.destination);gb.connect(out);musN=[sh,lp,gb,out,mg];
- const nb=ac.createBuffer(1,ac.sampleRate*.5,ac.sampleRate),nd=nb.getChannelData(0);for(let k=0;k<nd.length;k++)nd[k]=Math.random()*2-1;
- const env=(v,t,d,vol)=>{v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(vol,t+.005);v.gain.exponentialRampToValueAtTime(.0001,t+d)};
+function musicStart(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(mus)return;if(ac.state!='running')ac.resume();
+ const hz=m=>440*Math.pow(2,(m-69)/12),SP=.2,R=[40,40,43,38,40,40,45,43],sh=ac.createWaveShaper(),cv=new Float32Array(2048);for(let k=0;k<2048;k++){const x=k/1024-1;cv[k]=Math.tanh(x*2.4)/Math.tanh(2.4)}sh.curve=cv;sh.oversample='4x';
+ const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2600;lp.Q.value=.5;const gb=ac.createGain();gb.gain.value=.5;sh.connect(lp);lp.connect(gb);const out=ac.createDynamicsCompressor();out.threshold.value=-16;out.knee.value=12;out.ratio.value=4;out.attack.value=.01;out.release.value=.25;const mg=ac.createGain();mg.gain.value=.85;out.connect(mg);mg.connect(ac.destination);gb.connect(out);musN=[sh,lp,gb,out,mg];
+ const nb=ac.createBuffer(1,ac.sampleRate,ac.sampleRate),nd=nb.getChannelData(0);for(let k=0;k<nd.length;k++)nd[k]=Math.random()*2-1;
+ const env=(v,t,d,vol)=>{v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(vol,t+.008);v.gain.exponentialRampToValueAtTime(.0001,t+d)};
  const gtr=(notes,t,d,vol)=>{for(const m of notes){const o=ac.createOscillator(),v=ac.createGain();o.type='sawtooth';o.frequency.value=hz(m);env(v,t,d,vol);o.connect(v);v.connect(sh);o.start(t);o.stop(t+d+.05)}};
- const noise=(t,d,vol,type,f)=>{const n=ac.createBufferSource(),fl=ac.createBiquadFilter(),v=ac.createGain();n.buffer=nb;fl.type=type;fl.frequency.value=f;env(v,t,d,vol);n.connect(fl);fl.connect(v);v.connect(out);n.start(t);n.stop(t+d+.05)};
- const kick=(t)=>{const o=ac.createOscillator(),v=ac.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+.12);env(v,t,.22,.5);o.connect(v);v.connect(out);o.start(t);o.stop(t+.3)};
+ const noise=(t,d,vol,type,f,q)=>{const n=ac.createBufferSource(),fl=ac.createBiquadFilter(),v=ac.createGain();n.buffer=nb;fl.type=type;fl.frequency.value=f;fl.Q.value=q||.7;env(v,t,d,vol);n.connect(fl);fl.connect(v);v.connect(out);n.start(t);n.stop(t+d+.05)};
+ const kick=(t)=>{const o=ac.createOscillator(),v=ac.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.1);env(v,t,.24,.42);o.connect(v);v.connect(out);o.start(t);o.stop(t+.3)};
  const bass=(m,t,d)=>{const o=ac.createOscillator(),v=ac.createGain();o.type='triangle';o.frequency.value=hz(m-12);env(v,t,d,.16);o.connect(v);v.connect(out);o.start(t);o.stop(t+d+.05)};
- const LEAD={10:[76,74,71,0,0,0,0,0],14:[0,0,0,0,0,0,0,0],6:[]};const LD=[[],[0,0,0,0,76,0,74,71],[],[79,0,76,0,74,0,71,0]];
- let nx=ac.currentTime+.25,st=0;
- mus=setInterval(()=>{try{if(ac.currentTime>nx+.3)nx=ac.currentTime+.1;while(nx<ac.currentTime+1.6){if(!$('mute').dataset.m){const i=st%32,bar=Math.floor(i/8),k=i%8,r=R[(st%64>>3)],pm=[1,1,0,1,1,0,1,1][k];
-  if(pm){gtr([r+12,r+19],nx,k%4==0?SP*1.8:SP*.55,.06);bass(r,nx,k%4==0?SP*1.8:SP*.55)}
-  if(k==0||k==3||(k==4&&bar%2==0)||(k==6&&bar==3))kick(nx);
-  if(k==2||k==6)noise(nx,.18,.28,'highpass',1800);
-  noise(nx,.04,k%2?.05:.09,'highpass',7000);
-  if(i==0&&st%64==0)noise(nx,.8,.12,'highpass',5000);
-  const ld=LD[bar][k];if(ld&&(st%64)>=32)gtr([ld+12],nx,SP*1.6,.05)}
-  nx+=SP;st++}}catch(_){}},250)}catch(_){}}
+ const LD=[[],[0,0,0,0,76,0,74,71],[],[79,0,76,0,74,0,71,0]];
+ let nx=ac.currentTime+.25,st=0,was=ac.state;
+ const pump=()=>{try{if(ac.state!='running'){was=ac.state;if(ac.state=='suspended')ac.resume();return}const ct=ac.currentTime;if(was!='running'){was='running';nx=ct+.15}
+  if(nx<ct+.02){const sk=Math.ceil((ct+.05-nx)/SP);nx+=sk*SP;st+=sk}
+  while(nx<ct+1.2){if(!$('mute').dataset.m){const i=st%32,bar=Math.floor(i/8),k=i%8,r=R[(st%64>>3)],pm=[1,1,0,1,1,0,1,1][k];
+   if(pm){gtr([r+12,r+19],nx,k%4==0?SP*1.8:SP*.55,.06);bass(r,nx,k%4==0?SP*1.8:SP*.55)}
+   if(k==0||k==3||(k==4&&bar%2==0)||(k==6&&bar==3))kick(nx);
+   if(k==2||k==6)noise(nx,.18,.2,'bandpass',2600,.6);
+   noise(nx,.05,k%2?.035:.06,'bandpass',8000,.8);
+   if(i==0&&st%64==0)noise(nx,.8,.08,'bandpass',6000,.6);
+   const ld=LD[bar][k];if(ld&&(st%64)>=32)gtr([ld+12],nx,SP*1.6,.05)}
+   nx+=SP;st++}}catch(_){}};
+ pump();mus=setInterval(pump,120)}catch(_){}}
+['pointerdown','keydown','touchend'].forEach(ev=>addEventListener(ev,()=>{try{if(ac&&ac.state=='suspended')ac.resume()}catch(_){}},{passive:true}));
 function musicStop(){if(mus){clearInterval(mus);mus=null}for(const n of musN){try{n.disconnect()}catch(_){}}musN=[]}
 function beep(f,d,t,vol){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if($('mute').dataset.m)return;const o=ac.createOscillator(),v=ac.createGain();o.type=t||'square';o.frequency.value=f;v.gain.value=vol||.04;v.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.connect(v);v.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(_){}}
 
@@ -717,8 +722,8 @@ function step(dt){
  if(act){act=false;if(chk)resolve();else if(!rep){const L=lore.find(r=>Math.hypot(r.x-p.x,r.y-p.y)<T*1.8);if(L)openNote(L);else if(brk&&Math.hypot(brk.x-p.x,brk.y-p.y)<T*2.5){al=2.5;openNote({txt:'The elevator is jammed shut. Something knocks from inside whenever you get close, and the whole room can hear it.',read:true})}else{const n=ms.find(a=>!a.d&&Math.hypot(a.x-p.x,a.y-p.y)<T*1.5);if(n){rep=n;rt=1;gt=0;gi=0;beep(300,.1,'square',.05);setTimeout(()=>beep(520,.12,'square',.05),90)}}}}
  if(rep&&(rep.d||m>.5||Math.hypot(rep.x-p.x,rep.y-p.y)>T*1.8)){rep=null;chk=null}
  const fixNow=!!rep;
- const sm=ST.spd*(boost>0?1.45:1)*(fl2>0?1.55:1);let sp=120*sm,run=(k.ShiftLeft||k.ShiftRight||runBtn)&&m>.1&&!p.ex&&p.st>0;
- if(run){sp=185*sm;if(!(fl2>0))p.st-=dt;if(p.st<=0){p.st=0;p.ex=true}}else{p.st=Math.min(p.mx,p.st+dt*2.75);if(p.ex&&p.st>2.5)p.ex=false}
+ const bm=(boost>0?1.45:1)*(fl2>0?1.55:1),sm=ST.spd*bm;let sp=120*sm,run=(k.ShiftLeft||k.ShiftRight||runBtn)&&m>.1&&!p.ex&&p.st>0;
+ if(run){sp=185*ST.rn*bm;if(!(fl2>0))p.st-=dt;if(p.st<=0){p.st=0;p.ex=true}}else{p.st=Math.min(p.mx,p.st+dt*2.75);if(p.ex&&p.st>2.5)p.ex=false}
  if(!(fl2>0)&&pud.some(q=>Math.hypot(q.x-p.x,q.y-p.y)<q.r*T*.8))sp*=.65;
  if(m>.05){p.fa=Math.atan2(ix,iy);p.w+=dt*(run?14:9);fsT-=dt;if(fsT<=0&&!rep){fsT=run?.2:.32;beep(95+R(0,30),.05,'triangle',.03)}}
  if(m>.05&&!fixNow)mv(p,ix/Math.max(1,m)*sp*dt,iy/Math.max(1,m)*sp*dt);
@@ -1059,7 +1064,7 @@ function admBag(id){const fs=freeSlot();if(fs<0){admMsg('Bag is full.');return}s
 const ADM=[
  ['Seeds and unlocks',[
   ['+1,000 seeds',()=>{bank+=1000;return '+1,000 seeds'}],['+100,000 seeds',()=>{bank+=100000;return '+100,000 seeds'}],['+50 research',()=>{sv.res=(sv.res||0)+50;return '+50 research'}],
-  ['Unlock all birds',()=>{TOONS.forEach(t=>{if(!sv.toons.includes(t.id))sv.toons.push(t.id)});return 'All birds unlocked'}],
+  ['Unlock all birds',()=>{sv.all=1;TOONS.forEach(t=>{if(!sv.toons.includes(t.id))sv.toons.push(t.id)});computeST();return 'All '+TOONS.length+' toons unlocked. Open Toons in the lobby and pick any of them.'}],
   ['Unlock all trinkets',()=>{TRK.forEach(t=>{if(!sv.trk.includes(t.id))sv.trk.push(t.id)});return 'All trinkets unlocked'}],
   ['Zero seeds',()=>{bank=0;return 'Seeds set to 0'}]]],
  ['Bag',[['+ Speed Candy',()=>admBag('candy')],['+ Patch Kit',()=>admBag('patch')],['+ Fix Wrench',()=>admBag('wrench')]]],
