@@ -972,17 +972,8 @@ const SHOP={x:HX-7,z:0};let SKP=null;
   shelf(-2.3,3.3,[0xe05a5a,0x4aa8e8,0xf7d84a,0x62c76b,0xe86bb4]);shelf(2.3,3.9,[0x6b6be0,0xf59b3d,0x62c76b,0xe05a5a,0x4aa8e8]);
   // counter ledge
   lbm(6.8,.2,1.3,LT,0,1.95,.9,ks);lbm(6.8,.5,.16,0x8a4a14,0,1.7,1.5,ks);lbm(6.8,.05,1.3,0xc4702a,0,2.07,.9,ks);
-  // shopkeeper: round brown bird, yellow hat, black shirt
-  {const kg=new THREE.Group();kg.position.set(0,1.9,-1.2);ks.add(kg);
-   sp3(.85,1,.95,.95,0x8a5a2b,0,.85,0,kg);
-   const sh=new THREE.Mesh(new THREE.SphereGeometry(.88,18,10,0,Math.PI*2,Math.PI*.52,Math.PI*.48),M(0x151515));sh.scale.set(1,.95,.95);sh.position.set(0,.85,0);kg.add(sh);
-   for(const sd of[-1,1]){sp3(.19,1,1,1,0xffffff,sd*.3,1.12,.68,kg);sp3(.1,1,1,1,0x111111,sd*.3,1.12,.82,kg)}
-   const bk=new THREE.Mesh(new THREE.ConeGeometry(.14,.4,10),M(0xf08a20));bk.rotation.x=Math.PI/2;bk.position.set(0,.94,.9);kg.add(bk);
-   const brim=new THREE.Mesh(new THREE.CylinderGeometry(.64,.64,.07,20),M(0xf4c430));brim.position.set(0,1.58,.02);brim.rotation.x=.08;kg.add(brim);
-   const crown=new THREE.Mesh(new THREE.CylinderGeometry(.4,.43,.46,20),M(0xf4c430));crown.position.set(0,1.82,.02);kg.add(crown);
-   const band=new THREE.Mesh(new THREE.CylinderGeometry(.44,.44,.09,20),M(0x2a1a0a));band.position.set(0,1.68,.02);kg.add(band);
-   const wl2=sp3(.3,.5,1,.75,0x6e4420,-.84,.8,0,kg),wr2=sp3(.3,.5,1,.75,0x6e4420,.84,.8,0,kg);
-   SKP={g:kg,wl:wl2,wr:wr2}}
+  // shopkeeper: the real Kakeeke
+  {const sk=kkBody();sk.scale.set(1.15,1.15,1.15);sk.position.set(0,1.9,-1.1);ks.add(sk);SKP={g:sk,K:sk.userData.K}}
   // teal vase with yellow and orange flowers
   {const vs=new THREE.Mesh(new THREE.CylinderGeometry(.3,.2,.7,14),M(0x2fb5a8));vs.position.set(2.5,2.42,.95);ks.add(vs);const nk=new THREE.Mesh(new THREE.CylinderGeometry(.17,.2,.2,14),M(0x2fb5a8));nk.position.set(2.5,2.87,.95);ks.add(nk);
    [[-.22,.62,.1],[0,.82,-.05],[.22,.58,.12],[-.08,.46,-.16],[.16,.72,-.12]].forEach(([dx,dy,dz],i)=>{const hy=2.95+dy;lbm(.04,dy,.04,0x2f8a3a,2.5+dx,2.95+dy/2,.95+dz,ks);sp3(.17,1,1,.7,i%2?0xff9a2a:0xffd23a,2.5+dx,hy,.95+dz+.04);sp3(.08,1,1,1,0xc96a10,2.5+dx,hy,.95+dz+.16)})}
@@ -1080,7 +1071,7 @@ function lobbyView(t){
  pipg.position.y=mvg?Math.abs(Math.sin(lp.w))*.08:0;{const L=pipg.userData.legs,s5=mvg?Math.sin(lp.w):0;L[0].rotation.x=s5*.8;L[1].rotation.x=-s5*.8}pAnim(mvg,false,t);walkAnim(pipg,sv.sel,lp.w,mvg,t,false);
  const hd=9*Math.cos(cp),hh=9*Math.sin(cp)+.8;let cx2=lp.x+Math.sin(ca)*hd,cz2=lp.z+Math.cos(ca)*hd;cx2=Math.max(-HX+1,Math.min(HX-1,cx2));cz2=Math.max(-HZ+1,Math.min(HZ-1,cz2));
  cam.position.set(300+cx2,hh,cz2);cam.lookAt(300+lp.x,1,lp.z);pl.position.set(300+lp.x,5,lp.z);pl.distance=110;
- MOB.forEach((m,i)=>{m.rotation.y=t/700+i;m.position.y+=Math.sin(t/500+i)*.002});if(SKP){const ph=t/420;SKP.g.position.y=1.9+Math.abs(Math.sin(ph))*.05;SKP.wl.rotation.z=.3+Math.sin(ph*2)*.12;SKP.wr.rotation.z=-.3-Math.sin(ph*2+1)*.12;const lx=lp.z-SHOP.z,lzd=SHOP.x-lp.x,ta=Math.max(-.7,Math.min(.7,Math.atan2(lx,Math.max(.5,lzd))));SKP.g.rotation.y+=(ta-SKP.g.rotation.y)*.08}{const sa=Math.atan2(cam.position.x-300,cam.position.z);lbSign.rotation.y=sa;lbSign.position.set(Math.sin(sa)*2.5,6.3,Math.cos(sa)*2.5);const cxw=cam.position.x-300,czw=cam.position.z,ddx=lp.x-cxw,ddz=lp.z-czw,l2=ddx*ddx+ddz*ddz||1;let uu=-(cxw*ddx+czw*ddz)/l2;uu=Math.max(0,Math.min(1,uu));const oc=Math.hypot(cxw+ddx*uu,czw+ddz*uu)<2.3?.3:1;if(oc!=trOp){trOp=oc;TRM.forEach(m=>{m.opacity=oc})}}PADS.forEach(P=>{P.sg.rotation.y=Math.atan2(cam.position.x-300-P.x,cam.position.z-P.z)});
+ MOB.forEach((m,i)=>{m.rotation.y=t/700+i;m.position.y+=Math.sin(t/500+i)*.002});if(SKP){try{kkAnim(t/1000,{ph:0,mode:'walk',stun:0,idle:1},SKP.K)}catch(_){}const lx=lp.z-SHOP.z,lzd=SHOP.x-lp.x,ta=Math.max(-.7,Math.min(.7,Math.atan2(lx,Math.max(.5,lzd))));SKP.g.rotation.y+=(ta-SKP.g.rotation.y)*.08}{const sa=Math.atan2(cam.position.x-300,cam.position.z);lbSign.rotation.y=sa;lbSign.position.set(Math.sin(sa)*2.5,6.3,Math.cos(sa)*2.5);const cxw=cam.position.x-300,czw=cam.position.z,ddx=lp.x-cxw,ddz=lp.z-czw,l2=ddx*ddx+ddz*ddz||1;let uu=-(cxw*ddx+czw*ddz)/l2;uu=Math.max(0,Math.min(1,uu));const oc=Math.hypot(cxw+ddx*uu,czw+ddz*uu)<2.3?.3:1;if(oc!=trOp){trOp=oc;TRM.forEach(m=>{m.opacity=oc})}}PADS.forEach(P=>{P.sg.rotation.y=Math.atan2(cam.position.x-300-P.x,cam.position.z-P.z)});
  EL.forEach((e2,i)=>{if(e2.br){e2.lmp.material.color.setHex(Math.sin(t/60)*Math.sin(t/230)>.2?0xffa030:0x2a1a0a);return}const idx=PADS.findIndex(P=>P.el===e2),op=onPad>=0&&idx==onPad&&padT<3.5?1:0;e2.dl.position.x=-.95-op*1.9;e2.dr.position.x=.95+op*1.9;e2.lmp.material.color.setHex(op?0xffcf4a:0xff6f6f)});
  shTo(300+lp.x,lp.z);rd.render(sc,cam);ox.setTransform(dpr,0,0,dpr,0,0);ox.clearRect(0,0,vw,vh)}
 function twAnim(m,t,ph,ch,st){const U=m.userData;if(m.rotation.order!='YXZ')m.rotation.order='YXZ';
