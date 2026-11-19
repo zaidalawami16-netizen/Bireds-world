@@ -155,6 +155,22 @@ body:has(#lob:not([hidden])) #bl{bottom:66px}
 #emw[hidden],#emb[hidden]{display:none}#emw button{width:66px;background:#1b1b22;border:3px solid #34343c;border-radius:12px;color:#fff;font:700 11px system-ui,sans-serif;padding:6px 2px;cursor:pointer}#emw button b{display:block;font-size:26px;font-weight:400}.none{color:#cfd3e8;font:600 13px system-ui,sans-serif;padding:4px 6px;max-width:230px}
 @media(max-height:480px){#emb{bottom:150px;width:44px;height:44px;font-size:22px}#emw{bottom:140px}}
 @media(max-height:480px){#lob .lbtns{margin-right:150px;flex-wrap:wrap;justify-content:center}#lob .lbtns button{font-size:12px;padding:5px 9px}}
+
+#albbtn.near{animation:kpl .8s infinite alternate}
+.ckb{color:#5ce0b0!important;font-weight:800!important}
+.atr{margin-top:8px;background:#17171c;border:3px solid #0b0b0d;border-radius:12px;padding:8px 10px;text-align:center}.atr.ok{border-color:#2fb84b}
+.atl{font-weight:800;font-size:12px;letter-spacing:1px;color:#ffcf4a}
+.atst{font-weight:800;font-size:19px;color:#fff;letter-spacing:.5px;margin:2px 0 4px}
+.acl{display:block;width:78%;max-width:240px;margin:2px auto 0;padding:7px 0;background:linear-gradient(#58e36e,#2fb84b);color:#0d4a1b;font:800 18px/1 system-ui,sans-serif;border:3px solid #0b0b0d;border-radius:14px;cursor:pointer;box-shadow:0 0 12px rgba(95,220,110,.55);animation:aclp 1.1s ease-in-out infinite}
+.acl.eq{background:linear-gradient(#ffd45a,#e8a91c);color:#4a3000;box-shadow:none;animation:none}
+@keyframes aclp{50%{transform:scale(1.05)}}
+.acap{width:92px;height:128px;margin:8px auto 4px;border-radius:22px;border:4px solid #0b0b0d;background:linear-gradient(#34343c,#1f1f25);box-shadow:inset 0 0 0 3px #44444f;display:flex;align-items:center;justify-content:center}
+.acap img{width:66px;height:66px;object-fit:contain}
+.atn{font-weight:800;font-size:14px}.atf{font-size:12px;color:#b9bdd6;margin-top:1px}.atp{font:italic 600 15px system-ui,sans-serif;color:#fff;margin-top:3px}
+@media(max-height:480px){.atr{padding:4px 8px}.atst{font-size:15px;margin:0 0 3px}.acl{font-size:14px;padding:5px 0;width:70%}.acap{width:62px;height:82px;margin:5px auto 2px;border-width:3px;border-radius:16px}.acap img{width:44px;height:44px}.atn,.atp{font-size:12px}.atf{display:none}}
+
+.atop.wt{display:grid;grid-template-columns:minmax(0,1fr) minmax(136px,47%);gap:8px;align-items:start}.atop.wt .atr{margin-top:0;padding:6px 8px}.atop.wt .atst{font-size:16px}.atop.wt .adt .at.big,.atop.wt .at.big{width:min(100%,150px)}.apt{min-width:0}
+@media(max-height:480px){.atop.wt .at.big{width:84px}}
 </style>
 <canvas id="gl"></canvas><canvas id="c"></canvas>
 <div id="hud">
@@ -265,7 +281,7 @@ const TWL=[
  {id:'pip',n:'Twisted Puffy',pal:0,fl:'Every floor',tx:'A round, glassy-eyed copy of Puffy. It never sleeps and it never stops patrolling the factory.',bh:'Spots you from 7 tiles away and gets faster with every floor. Running or fixing a generator close to it gives you away.'},
  {id:'lov',n:'Twisted Abbas',pal:'lov',fl:'Floor 3 and up. A whole pack of them roams from floor 5.',tx:'The warped echo of the free starter. Once he starts looking at you, he keeps looking.',bh:'Sees you from 6 to 7 tiles, hears running from 9 tiles, and sprints as soon as he locks on.'},
  {id:'lut',n:'Twisted Cookie',pal:'lut',fl:'Floors 3, 6, 9, 12 and so on (every third floor)',tx:'Sweet on the outside. Do not trust the smile.',bh:'Wanders around, then chases at high speed once you are within 6 tiles and in sight.'},
- {id:'snw',n:'Twisted Snowflake',pal:'snw',fl:'Floors 1, 4, 7, 10 and so on (every third floor)',tx:'Pale, cold and very quiet. It leaves tiny rainbow glimmers wherever it has been.',bh:'Wanders until it sees you within 6 tiles, then chases.'},
+ {id:'snw',n:'Twisted Snowflake',tr:'rbf',pal:'snw',fl:'Floors 1, 4, 7, 10 and so on (every third floor)',tx:'Pale, cold and very quiet. It leaves tiny rainbow glimmers wherever it has been.',bh:'Wanders until it sees you within 6 tiles, then chases.'},
  {id:'lem',n:'Twisted Lemon',pal:'lem',fl:'Floors 2, 5, 8, 11 and so on (every third floor)',tx:'Sour and twitchy. Lemon after the factory got to it.',bh:'Wanders, then chases at high speed once you are within 6 tiles and in sight.'},
  {id:'slv',n:'Twisted Silver',pal:'slv',fl:'Floors 8, 12, 16 and so on (every fourth floor from 8)',tx:'A grey-blue lovebird made of cold metal. It is slow to wake up, but loud once it does.',bh:'Starts stunned. Cut him and he drops big piles of silver. Step on one and the clink calls him straight to you.'},
  {id:'lgt',n:'Twisted Lightning',pal:'lgt',fl:'Floors 2, 5, 8, 11 and so on',tx:'A twitchy cockatiel that crackles with static. Where he goes, the lights flicker.',bh:'Charges up with a warning screech, then dashes in a straight line, very fast. Then he rests for a moment.'},
@@ -273,9 +289,11 @@ const TWL=[
  {id:'kkt',n:'Twisted Kakeeke',pal:0,kk:1,fl:'Floors 20, 40, 60 and so on',tx:'The Admin Catcher, twisted and gigantic. The factory itself seems to shake when he walks.',bh:'Hears you from far away, growls, and hits for two hearts. He gets tired after about 8 seconds of running.'}
 ];
 const RBF_NEED=20,TRKOK=t=>!t.enc||Object.keys(t.enc).every(k=>((sv.enc||{})[k]||0)>=t.enc[k]),trkNeed=t=>Object.keys(t.enc||{}).map(k=>{const w=TWL.find(x=>x.id==k);return (w?w.n:k)+' '+Math.min(t.enc[k],(sv.enc||{})[k]||0)+'/'+t.enc[k]}).join(', ');
+const albTk=t=>t.tr?TRK.find(x=>x.id==t.tr):null,albNeed=(t,tk)=>(tk.enc&&tk.enc[t.id])||20,albReady=t=>{const tk=albTk(t);return !!tk&&!sv.trk.includes(tk.id)&&((sv.enc||{})[t.id]||0)>=albNeed(t,tk)};
+function albPing(){const b=$('albbtn');if(b)b.classList.toggle('near',TWL.some(albReady))}
 let metF={};
 function meet(id){if(metF[id])return;metF[id]=1;sv.enc=sv.enc||{};const f=!sv.enc[id];sv.enc[id]=(sv.enc[id]||0)+1;save();const t=TWL.find(x=>x.id==id);if(!t)return;
- if(id=='snw'&&sv.enc.snw==RBF_NEED)toast("Rainbow Feather unlocked! Claim it in Kakeeke's Shop");else if(id=='snw')toast('You met Twisted Snowflake ('+Math.min(RBF_NEED,sv.enc.snw)+'/'+RBF_NEED+')');else if(f)toast('New page in your Album: '+t.n+'!')}
+ const tk=albTk(t),c=sv.enc[id];if(tk){const need=albNeed(t,tk);if(c==need)toast(tk.n+' is ready! Claim it in the Twisted Album');else if(c<need&&!f)toast('You met '+t.n+' ('+c+'/'+need+')');else if(f)toast('New page in your Album: '+t.n+'!')}else if(f)toast('New page in your Album: '+t.n+'!')}
 const ALBT={};
 function albPal(t){return t.kk?TOONS.find(x=>x.id=='kak').pal:(t.pal?TOONS.find(x=>x.id==t.pal).pal:null)}
 function albThumb(id){
@@ -297,15 +315,20 @@ function albThumb(id){
  }catch(_){}
  if(!url){try{url=birdImg(albPal(t)||{})}catch(_){url=''}}
  ALBT[id]=url;return url}
+function albTrp(t,n,seen){const tk=albTk(t);if(!tk)return '';
+ const need=albNeed(t,tk),c=Math.min(n,need),own=sv.trk.includes(tk.id),done=n>=need,eq=sv.eq.includes(tk.id);
+ return `<div class='atr${done?' ok':''}'><div class='atl'>TRINKET</div><div class='atst'>${own?'CLAIMED':done?'COMPLETED':'IN PROGRESS'}</div>`
+  +(own?`<button class='acl eq' type='button' data-k='ar' data-id='${tk.id}'>${eq?'REMOVE':'EQUIP'}</button>`:done?`<button class='acl' type='button' data-k='ac' data-id='${tk.id}'>CLAIM!</button>`:'')
+  +`<div class='acap'><img src='${tk.ic}' alt=''></div><div class='atn'>${seen?tk.n:'???'}</div>${seen?`<div class='atf'>${tk.fx||''}</div>`:''}<div class='atp'>encounter ${c}/${need}</div><div class='apb'><i style='width:${Math.min(100,c/need*100)}%'></i></div></div>`}
 let albSel='pip';
 function rAlb(){const K=$('ac');if(!K||$('alb').hidden)return;
  const en=sv.enc||{},got=TWL.filter(t=>(en[t.id]||0)>0).length;$('agb').textContent='Discovered '+got+'/'+TWL.length;
  if(!TWL.some(t=>t.id==albSel))albSel=TWL[0].id;
  const t=TWL.find(x=>x.id==albSel),n=en[t.id]||0,seen=n>0;
- K.innerHTML="<div class='kg'><div class='ktg atg'>"+TWL.map(q=>{const m=en[q.id]||0;return `<div class='ktc${albSel==q.id?' sel':''}${m?'':' unk'}' data-k='as' data-id='${q.id}'><img class='at' src='${albThumb(q.id)}'><br>${m?q.n.replace('Twisted ',''):'???'}<br><span>${m?'Met '+m+(m==1?' time':' times'):'Not met yet'}</span></div>`}).join('')+"</div>"
-  +`<div class='kd adt'><img class='at big${seen?'':' unk'}' src='${albThumb(t.id)}'><b style='font-size:18px;display:block;text-align:center'>${seen?t.n:'???'}</b><div style='text-align:center;color:#ffcf4a;font-weight:800;font-size:13px;margin-top:2px'>${seen?'Times met: '+n:'Not met yet'}</div>`
+ K.innerHTML="<div class='kg'><div class='ktg atg'>"+TWL.map(q=>{const m=en[q.id]||0;return `<div class='ktc${albSel==q.id?' sel':''}${m?'':' unk'}' data-k='as' data-id='${q.id}'><img class='at' src='${albThumb(q.id)}'><br>${m?q.n.replace('Twisted ',''):'???'}<br><span>${m?'Met '+m+(m==1?' time':' times'):'Not met yet'}</span>${albReady(q)?"<br><span class='ckb'>Trinket ready!</span>":''}</div>`}).join('')+"</div>"
+  +`<div class='kd adt'><div class='atop${albTk(t)?' wt':''}'><div class='apt'><img class='at big${seen?'':' unk'}' src='${albThumb(t.id)}'><b style='font-size:18px;display:block;text-align:center'>${seen?t.n:'???'}</b><div style='text-align:center;color:#ffcf4a;font-weight:800;font-size:13px;margin-top:2px'>${seen?'Times met: '+n:'Not met yet'}</div></div>`+albTrp(t,n,seen)+"</div>"
   +(seen?`<div class='af'><b>About</b>${t.tx}</div><div class='af'><b>Found on</b>${t.fl}</div>`:`<div class='af'><b>Found on</b>${t.fl}</div><div class='af'>Meet this twisted in a run to fill in its page.</div>`)
-  +(t.id=='snw'?`<div class='af'><b>Reward: Rainbow Feather</b>Met ${Math.min(RBF_NEED,n)}/${RBF_NEED} times${n>=RBF_NEED?' (unlocked in Kakeeke\'s Shop)':''}<div class='apb'><i style='width:${Math.min(100,n/RBF_NEED*100)}%'></i></div></div>`:'')
+  +(albTk(t)?'':"<div class='af'><b>Trinket</b>No trinket for this twisted yet.</div>")
   +(seen?`<div class='af'><b>Behavior</b>${t.bh}</div>`:'')
   +"</div></div>"}
 let albOpen=false,wsOpen=false;
@@ -343,13 +366,13 @@ function rLobby(){
  const t=TOONS.find(x=>x.id==vt)||TOONS[0],own=sv.toons.includes(t.id),s=t.s;
  $('lst').innerHTML=`<img class='bi big' src='${birdImg(t.pal)}'><b>${t.n}</b> <span style='color:#b9bdd6;font-size:12px'>${t.d}</span><br><span style='color:#5ce0b0;font-size:12px'>${own?'':t.cost==0?'(Free starter: switch to use it) ':'(Locked until you buy this bird) '}${t.ab||''}</span><div class='sr'><span>Health</span><i>${st5(s.h)}</i><span>Speed</span><i>${st5(s.v)}</i><span>Stamina</span><i>${st5(s.s)}</i><span>Stealth</span><i>${st5(s.q)}</i><span>Repair</span><i>${st5(s.r)}</i><span>Skill check</span><i>${st5(s.k)}</i></div><button class='go2' data-k='e'${own&&sv.sel==t.id||!own&&(bank<t.cost||(sv.res||0)<(t.res||0)||!encOk(t)||!qOk(t))?' disabled':''}>${own?(sv.sel==t.id?'Equipped':'Equip'):(t.cost==0?'Switch to '+t.n+' (free)':!own&&!encOk(t)?'Meet Twisted '+t.n+' '+Math.min(t.enc,(sv.enc||{})[t.id]||0)+'/'+t.enc+' times':!own&&!qOk(t)?t.qn:'Buy for '+t.cost+' seeds'+(t.res?' + '+t.res+' research':''))}</button>`;
  $('lsk').innerHTML=`<div class='row2'><div><b>Choose your free toon</b><span>Pick Abbas or Lemon. You can switch any time.</span></div><button data-k='ws'>Choose</button></div>`+`<div class='row2'><div><b>Skins and emotes</b><span>Buy and wear them at Wister's Shop in the lobby.</span></div><button data-k='wo'>Open shop</button></div>`+(()=>{const i0=sv.starter=='lem'?'lem':'lov',t0=TOONS.find(x=>x.id==i0);return `<div class='row2${sv.sel==i0?' on':''}'><div><b>${t0.n}</b><span>Your free starter bird (not sold in the shop).</span></div><button data-k='ab' data-id='${i0}'>${sv.sel==i0?'Using':'Use'}</button></div>`})();
- rShop();rAlb();rWs()}
+ rShop();rAlb();rWs();albPing()}
 let ktab='toon',kt=null;const SHOPICO='data:image/svg+xml,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='54' height='54'><rect width='54' height='54' rx='10' fill='%234a2a17'/><rect x='8' y='14' width='38' height='18' fill='%23f2c94c'/><rect x='6' y='32' width='42' height='7' fill='%23c97a2e'/><circle cx='27' cy='24' r='7' fill='%238a5a2b'/><rect x='21' y='14' width='12' height='5' fill='%23f4c430'/></svg>").replace(/%2523/g,'%23').replace(/'/g,'%27');
 function rShop(){const K=$('kc');if(!K||$('ksh').hidden)return;
  $('ktb1').classList.toggle('on',ktab=='toon');$('ktb2').classList.toggle('on',ktab=='trk');
  $('kgb').textContent='Seeds: '+bank+'  ·  Research: '+(sv.res||0);
  if(ktab=='trk'){
-  K.innerHTML="<h4 class='kh'>Trinkets <small>(equip 2, they show next to your stamina bar)</small></h4>"+(TRK.length?TRK.filter(t=>!t.only||t.only==sv.sel).map(t=>{const own=sv.trk.includes(t.id),eq=sv.eq.includes(t.id),lk=!own&&!TRKOK(t);return `<div class='tcard${eq?' on':''}${lk?' lk':''}'><img class='tci' src='${t.ic}'><div class='tcm'><div class='tcn'>${t.n}</div><span class='rar r${t.rar||'Common'}'>${t.rar||'Common'}</span><div class='tcl'>Trinket</div><div class='tcd'>${t.d}</div></div><div class='tce'><b>Effect:</b> ${t.fx||''}</div>${!own&&t.enc?`<div class='tce'><b>Unlock:</b> Meet <i>${trkNeed(t)}</i> times.</div>`:''}<button class='kbuy' data-k='r' data-id='${t.id}'${lk||(!own&&bank<t.cost)?' disabled':''}>${own?(eq?'Remove':'Equip'):lk?'Locked':t.cost?'Buy for '+t.cost+' seeds':'Claim for free'}</button></div>`}).join(''):"<div class='kmt'>No trinkets for sale yet.</div>")
+  K.innerHTML="<h4 class='kh'>Trinkets <small>(equip 2, they show next to your stamina bar)</small></h4>"+(TRK.length?TRK.filter(t=>!t.only||t.only==sv.sel).map(t=>{const own=sv.trk.includes(t.id),eq=sv.eq.includes(t.id),lk=!own&&!TRKOK(t);return `<div class='tcard${eq?' on':''}${lk?' lk':''}'><img class='tci' src='${t.ic}'><div class='tcm'><div class='tcn'>${t.n}</div><span class='rar r${t.rar||'Common'}'>${t.rar||'Common'}</span><div class='tcl'>Trinket</div><div class='tcd'>${t.d}</div></div><div class='tce'><b>Effect:</b> ${t.fx||''}</div>${!own&&t.enc?`<div class='tce'><b>Unlock:</b> Meet <i>${trkNeed(t)}</i> times, then claim it in the Twisted Album.</div>`:''}<button class='kbuy' data-k='${!own&&t.enc&&!lk?'ao':'r'}' data-id='${t.id}'${lk||(!own&&!t.enc&&bank<t.cost)?' disabled':''}>${own?(eq?'Remove':'Equip'):lk?'Locked':t.enc?'Claim in the Twisted Album':t.cost?'Buy for '+t.cost+' seeds':'Claim for free'}</button></div>`}).join(''):"<div class='kmt'>No trinkets for sale yet.</div>")
    +"<h4 class='kh' style='margin-top:14px'>Items <small>(3 bag slots)</small></h4>"+ITEMS.map(it=>`<div class='row2'><div><b>${it.n}</b><span>${it.d}</span></div><button data-k='i' data-id='${it.id}'${bank<it.cost||freeSlot()<0?' disabled':''}>${freeSlot()<0?'Bag full':it.cost+' seeds'}</button></div>`).join('');return}
  const L=TOONS.filter(t=>t.id!='lov'&&t.id!='kak'&&t.id!='wis'&&t.id!='lem');if(!kt||!L.some(t=>t.id==kt))kt=(L.find(t=>!sv.toons.includes(t.id))||L[0]).id;
  const t=L.find(x=>x.id==kt),own=sv.toons.includes(t.id),s=t.s,can=!own&&bank>=t.cost&&(sv.res||0)>=(t.res||0)&&encOk(t)&&qOk(t);
@@ -365,6 +388,9 @@ $('lob').addEventListener('click',ev=>{const b=ev.target.closest('[data-k]');if(
  else if(k=='e'){const t=TOONS.find(x=>x.id==vt);if(sv.toons.includes(t.id))sv.sel=t.id;else if(t.id=='lov'||t.id=='lem'){sv.starter=t.id;sv.sel=t.id;fixStarter();vt=sv.sel;beep(900,.1,'triangle');toast(t.n+' is now your free toon!')}else if(bank>=t.cost&&(sv.res||0)>=(t.res||0)&&encOk(t)&&qOk(t)){bank-=t.cost;sv.res=(sv.res||0)-(t.res||0);sv.toons.push(t.id);sv.sel=t.id;beep(1000,.2,'triangle')}computeST();setToon()}
  else if(k=='ko'){setShop(true);return}
  else if(k=='as'){albSel=id}
+ else if(k=='ac'){const t=TRK.find(x=>x.id==id);if(t&&TRKOK(t)&&!sv.trk.includes(id)){sv.trk.push(id);let em='';if(sv.eq.length<2){sv.eq.push(id);em=' Equipped!'}computeST();beep(1000,.2,'triangle');toast(t.n+' claimed!'+em)}}
+ else if(k=='ar'){const t=TRK.find(x=>x.id==id);if(t&&sv.trk.includes(id)){if(sv.eq.includes(id))sv.eq=sv.eq.filter(x=>x!=id);else{sv.eq.push(id);if(sv.eq.length>2)sv.eq.shift()}computeST()}}
+ else if(k=='ao'){const w=TWL.find(x=>x.tr==id);if(w)albSel=w.id;setAlb(true)}
  else if(k=='wo'){setWs(true);return}else if(k=='wt'){wtab=id}
  else if(k=='wb'){const k2=SKINS.find(x=>x.id==id);if(k2){const o=ownSk();if(!o.includes(id)){if(bank<k2.cost)return;bank-=k2.cost;o.push(id);beep(1000,.2,'triangle');if(!k2.only||k2.only==sv.sel){sv.skin=id;setToon()}}else if((sv.skin||'')==id){sv.skin='';setToon();beep(700,.08,'triangle')}else{if(k2.only&&k2.only!=sv.sel)return;sv.skin=id;setToon();beep(900,.1,'triangle')}}}
  else if(k=='we'){const e2=EMOTES.find(x=>x.id==id);if(e2&&!ownEm().includes(id)&&bank>=e2.cost){bank-=e2.cost;ownEm().push(id);beep(1000,.2,'triangle');toast('Emote bought! Press V or tap the face button.')}}
@@ -372,7 +398,7 @@ $('lob').addEventListener('click',ev=>{const b=ev.target.closest('[data-k]');if(
  else if(k=='kt'){ktab=id}
  else if(k=='ks'){kt=id}
  else if(k=='kb'){const t=TOONS.find(x=>x.id==kt);if(!t)return;if(sv.toons.includes(t.id)){sv.sel=t.id;vt=t.id;toast(t.n+' equipped')}else if(bank>=t.cost&&(sv.res||0)>=(t.res||0)&&encOk(t)&&qOk(t)){bank-=t.cost;sv.res=(sv.res||0)-(t.res||0);sv.toons.push(t.id);beep(1000,.2,'triangle');toast('Bought '+t.n+'! Equip it from the shop or the Toons button.')}computeST();setToon()}
- else if(k=='r'){const t=TRK.find(x=>x.id==id);if(!t)return;if(!sv.trk.includes(id)){if(!TRKOK(t)||bank<t.cost)return;bank-=t.cost;sv.trk.push(id);beep(1000,.2,'triangle')}
+ else if(k=='r'){const t=TRK.find(x=>x.id==id);if(!t)return;if(!sv.trk.includes(id)){if(t.enc||!TRKOK(t)||bank<t.cost)return;bank-=t.cost;sv.trk.push(id);beep(1000,.2,'triangle')}
   if(sv.eq.includes(id))sv.eq=sv.eq.filter(x=>x!=id);else{sv.eq.push(id);if(sv.eq.length>2)sv.eq.shift()}computeST()}
  save();rLobby();slots()});
 let stSel=null;
