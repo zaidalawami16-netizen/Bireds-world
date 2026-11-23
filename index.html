@@ -602,7 +602,7 @@ function makeBird(tw,pal,skin){
   sp(1,.075,.045,.11,dk(p.bk||0xc87020,.8),0,1.36,.4);
   if(!p.ck&&!tw){for(const f of[-.1,0,.1]){const t2=sp(1,.04,.17+Math.abs(f)*-.4,.04,dk(HH,.85),f,1.8,.02);t2.rotation.z=-f*3}}
   if(!p.ck&&!p.lb&&!p.lk&&!tw&&!p.nc)for(const s of[-1,1]){sp(1,.09,.07,.04,0xf59a9a,s*.3,1.4,.33);sp(.026,1,1,1,0xffffff,s*.17,1.56,.46)}}
- g.userData={eye:em,wings,legs,wf:WF,spk,halos,hd,tent};if(tw){g.userData.born=performance.now();TWB.push(g)}return g}
+ g.userData={eye:em,wings,legs,wf:WF,spk,halos,hd,tent};if(tw){g.userData.an=p.an||'pip';g.userData.born=performance.now();TWB.push(g)}return g}
 const eg=new THREE.Group(),eyeM=M(0xffe066);eyeM.emissive=new THREE.Color(0x443300);
 const tb=makeBird(true),tbEye=tb.userData.eye;tb.scale.set(.85,.85,.85);eg.add(tb);
 const tc=makeBird(true,TOONS.find(x=>x.id=='lut').pal);tc.scale.set(.85,.85,.85);sc.add(tc);tc.visible=false;const ts=makeBird(true,TOONS.find(x=>x.id=='snw').pal);ts.scale.set(.85,.85,.85);sc.add(ts);ts.visible=false;const tlm=makeBird(true,TOONS.find(x=>x.id=='lem').pal);tlm.scale.set(.85,.85,.85);sc.add(tlm);tlm.visible=false;
@@ -965,7 +965,7 @@ let fd=null,ft=0;
 let death=null;const gorg=new THREE.Group(),goreP=[];sc.add(gorg);
 const GSPH=new THREE.SphereGeometry(1,6,5),GFEA=new THREE.BoxGeometry(.16,.015,.06),GRM=[0xb1121f,0x8a0a14,0xd01b2a].map(c=>new THREE.MeshBasicMaterial({color:c}));
 function clearGore(){while(gorg.children.length)gorg.remove(gorg.children[0]);goreP.length=0;death=null}
-function goreBurst(){clearGore();const now=performance.now(),x=p.x/T,z=p.y/T,tp=TOONS.find(q=>q.id==sv.sel),fc=(tp&&tp.pal&&tp.pal.b)||0x4f8a3c;
+function goreBurst(){clearGore();twKill();const now=performance.now(),x=p.x/T,z=p.y/T,tp=TOONS.find(q=>q.id==sv.sel),fc=(tp&&tp.pal&&tp.pal.b)||0x4f8a3c;
  death={s:now,lt:now,sp:Array.from({length:16},()=>({x:Math.random(),y:Math.random()*.8,r:18+Math.random()*70,st:Math.random()*.35,dl:40+Math.random()*80,ph:Math.random()*6.28,dr:[0,1,2,3,4].map(()=>[Math.random()*6.28,1.1+Math.random()*.9,.1+Math.random()*.2])}))};
  for(let i=0;i<46;i++){const r=.04+Math.random()*.06,m=new THREE.Mesh(GSPH,GRM[i%3]),a=Math.random()*6.28,sp=1.5+Math.random()*4.5;m.scale.set(r,r,r);m.position.set(x,.4+Math.random()*.8,z);gorg.add(m);goreP.push({m,vx:Math.cos(a)*sp,vy:2+Math.random()*5,vz:Math.sin(a)*sp,r,k:0})}
  for(let i=0;i<24;i++){const m=new THREE.Mesh(GFEA,new THREE.MeshBasicMaterial({color:i%3?fc:0xf1ede0,side:THREE.DoubleSide})),a=Math.random()*6.28,sp=.8+Math.random()*2.6;m.scale.set(1.4,1,1.4);m.position.set(x,.5+Math.random()*.9,z);m.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);gorg.add(m);goreP.push({m,vx:Math.cos(a)*sp,vy:1.5+Math.random()*3.5,vz:Math.sin(a)*sp,k:1,rx:(Math.random()-.5)*9,rz:(Math.random()-.5)*9})}
@@ -995,6 +995,48 @@ function whisper(d){try{ac=ac||new(window.AudioContext||window.webkitAudioContex
 const TV=new THREE.Vector3();let twLast=0;
 function thud(d,run){const v=Math.min(.42,.95/(1+d*.55));beep(62,.22,'sine',v);beep(40,.32,'sine',v*.9);beep(125,.05,'square',v*.18);if(d<6)sh=Math.max(sh,(1-d/6)*(run?1.7:1.2))}
 function glitchSnd(d){for(let i=0;i<6;i++)setTimeout(()=>beep(180+Math.random()*1900,.035,'square',.03*(1-d/16)+.005),i*28)}
+/* ---------- twisted voices (synth, no samples) ---------- */
+let TWBUS=null,twVT=0,twRT=0;const TQ=new THREE.Vector3(),TQi=new THREE.Quaternion();
+function twBus(c){const m=c.createGain();m.gain.value=.9;const cp=c.createDynamicsCompressor();cp.threshold.value=-9;cp.knee.value=10;cp.ratio.value=5;cp.attack.value=.005;cp.release.value=.3;m.connect(cp);cp.connect(c.destination);
+ const sn=c.createGain(),d1=c.createDelay(1),d2=c.createDelay(1),fb=c.createGain(),lp=c.createBiquadFilter();d1.delayTime.value=.21;d2.delayTime.value=.34;fb.gain.value=.5;lp.type='lowpass';lp.frequency.value=1500;
+ sn.connect(d1);d1.connect(lp);lp.connect(d2);d2.connect(fb);fb.connect(d1);lp.connect(m);d2.connect(m);return{c,m,sn}}
+function tvNB(c){if(!c._nb){const n=c.sampleRate*2|0,b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=Math.random()*2-1;c._nb=b}return c._nb}
+function tvL(c,param,rate,depth,t0,dur){const l=c.createOscillator(),g=c.createGain();l.frequency.value=rate;g.gain.value=depth;l.connect(g);g.connect(param);l.start(t0);l.stop(t0+dur+.05)}
+function tvN(c,D,t0,dur,type,f,q,v,o){o=o||{};const s=c.createBufferSource();s.buffer=tvNB(c);s.loop=true;const bp=c.createBiquadFilter();bp.type=type;bp.Q.value=q;bp.frequency.setValueAtTime(f,t0);if(o.f1)bp.frequency.exponentialRampToValueAtTime(o.f1,t0+dur);
+ const g=c.createGain(),at=o.att==null?Math.min(.04,dur*.3):o.att;g.gain.setValueAtTime(.0001,t0);g.gain.linearRampToValueAtTime(v,t0+at);g.gain.setValueAtTime(v,t0+Math.max(at,dur*(o.hold==null?.1:o.hold)));g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+ s.connect(bp);let n=bp;if(o.am){const a=c.createGain();a.gain.value=.5;tvL(c,a.gain,o.am,.5,t0,dur);bp.connect(a);n=a}n.connect(g);g.connect(D);s.start(t0,Math.random()*1.5);s.stop(t0+dur+.05);return g}
+function tvO(c,D,type,keys,t0,dur,v,o){o=o||{};const s=c.createOscillator(),g=c.createGain();s.type=type;s.frequency.setValueAtTime(keys[0][1],t0);for(let i=1;i<keys.length;i++)s.frequency.exponentialRampToValueAtTime(keys[i][1],t0+keys[i][0]*dur);
+ const at=o.att==null?Math.min(.12,dur*.25):o.att;g.gain.setValueAtTime(.0001,t0);g.gain.linearRampToValueAtTime(v,t0+at);g.gain.setValueAtTime(v,t0+Math.max(at,dur*.6));g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+ s.connect(g);g.connect(D);if(o.vib)tvL(c,s.frequency,o.vib[0],o.vib[1],t0,dur);if(o.am)tvL(c,g.gain,o.am[0],v*o.am[1],t0,dur);s.start(t0);s.stop(t0+dur+.05);return s}
+function tvFm(c,D,fr,q){const i=c.createGain();for(const f of fr){const b=c.createBiquadFilter();b.type='bandpass';b.frequency.value=f;b.Q.value=q||6;const g=c.createGain();g.gain.value=1.6;i.connect(b);b.connect(g);g.connect(D)}return i}
+function tvX(c,D,amt){const w=c.createWaveShaper(),n=256,cu=new Float32Array(n);for(let i=0;i<n;i++)cu[i]=Math.tanh((i/(n-1)*2-1)*amt);w.curve=cu;const g=c.createGain();g.gain.value=.35;w.connect(g);g.connect(D);return w}
+const TVC={
+ pip(c,D,t0,L,k){const n=Math.round(9+15*L);let t=t0;for(let i=0;i<n;i++){tvN(c,D,t,.02,'bandpass',2400+Math.random()*2800,7,.55*k);t+=.026+Math.random()*.05}
+  tvN(c,D,t0,.6+.5*L,'highpass',3600,.7,.1*k,{att:.25});tvO(c,D,'sine',[[0,60],[1,42]],t0,.8+.7*L,.3*k,{am:[9,.7]});
+  if(L>1.3)tvO(c,tvFm(c,D,[900,2400],5),'sawtooth',[[0,760],[.5,1900],[1,1300]],t0+.15,1.1,.16*k,{vib:[26,110]})},
+ lov(c,D,t0,L,k){tvO(c,tvX(c,D,5),'sawtooth',[[0,78],[.5,64],[1,52]],t0,.9+.7*L,.22*k,{am:[27,.7]});tvN(c,tvFm(c,D,[450,1100],3),t0,.9+.6*L,'lowpass',900,.7,.2*k,{att:.2});
+  if(L>1.3){tvO(c,tvFm(c,D,[600,1300],7),'sawtooth',[[0,300],[.35,560],[.7,470],[1,260]],t0+.3,1.7,.2*k,{vib:[5.5,14]});tvO(c,D,'triangle',[[0,600],[.35,1120],[.7,940],[1,520]],t0+.3,1.7,.05*k,{vib:[5.5,28]})}},
+ lut(c,D,t0,L,k){const n=2+Math.round(L*2);for(let i=0;i<n;i++){const t=t0+i*(.16+.03*Math.random());tvO(c,D,'sawtooth',[[0,5600],[1,2400]],t,.15,.3*k,{att:.01,vib:[70,500]});tvN(c,D,t,.15,'bandpass',4200,3,.14*k,{att:.01})}
+  if(L>1.3){tvO(c,tvFm(c,D,[1800,3800],4),'sawtooth',[[0,3600],[.4,2900],[1,1500]],t0+.2,1.2,.34*k,{vib:[34,160]});tvN(c,D,t0+.2,1.2,'bandpass',3000,1.2,.18*k)}},
+ lem(c,D,t0,L,k){const dur=.8+.5*L;tvO(c,tvFm(c,D,[750,1800],5),'sawtooth',[[0,360],[.4,820],[.7,640],[1,400]],t0,dur,.22*k,{vib:[7,22]});tvN(c,D,t0,dur,'bandpass',2300,1.5,.08*k,{att:.12,am:40});tvO(c,D,'sine',[[0,45],[1,38]],t0,dur,.2*k,{am:[24,.8]})},
+ slv(c,D,t0,L,k){const dur=1.1+.8*L;tvN(c,D,t0,dur,'bandpass',6200,.6,.32*k,{att:.5,hold:.8});tvN(c,D,t0+dur*.45,.55+.3*L,'bandpass',3800,3,.3*k,{att:.04,am:58});
+  if(L>1.3)tvO(c,D,'sine',[[0,95],[1,58]],t0,dur,.25*k,{am:[6,.7]})},
+ lgt(c,D,t0,L,k){const n=6+Math.round(L*6);let t=t0;for(let i=0;i<n;i++){tvN(c,D,t,.035,'bandpass',1800+Math.random()*1600,3,.7*k,{att:.003});tvO(c,D,'sine',[[0,320],[1,110]],t,.04,.2*k,{att:.003});t+=.05+Math.random()*.08}
+  tvN(c,D,t0,.7+.4*L,'bandpass',2600,1,.1*k,{att:.3});if(L>1.3)tvO(c,tvX(c,D,4),'sawtooth',[[0,100],[1,66]],t0+.2,1.2,.18*k,{am:[18,.7]})},
+ mrc(c,D,t0,L,k){const dur=1+L,o=tvO(c,D,'sine',[[0,115],[1,66]],t0,dur,.28*k,{am:[11,.5]});tvL(c,o.frequency,13,55,t0,dur);
+  for(let i=0;i<Math.round(5+4*L);i++)tvO(c,D,'sine',[[0,170+Math.random()*180],[1,520]],t0+Math.random()*dur,.05,.15*k,{att:.004});
+  tvO(c,D,'sine',[[0,50],[1,34]],t0,dur+.4,.26*k);tvO(c,D,'triangle',[[0,100],[1,68]],t0,dur+.4,.1*k)},
+ snw(c,D,t0,L,k){const dur=.8+.7*L;tvO(c,tvX(c,tvFm(c,D,[520,1500],5),3),'sawtooth',[[0,210],[.3,165],[.6,180],[1,92]],t0,dur,.4*k,{am:[31,.7],vib:[6,6]});tvN(c,D,t0,dur,'bandpass',1200,1.2,.09*k,{att:.2})},
+ def(c,D,t0,L,k){const dur=1.3+.9*L,F=tvFm(c,D,[360,820],6);for(const[f,dt]of[[196,0],[196,1.5],[293,-1]])tvO(c,F,'sawtooth',[[0,f*1.05+dt],[1,f*.78+dt]],t0,dur,.17*k,{am:[4,.4],vib:[5,3]});tvN(c,D,t0+.2,dur,'bandpass',3200,4,.05*k,{att:.4})}};
+function twPlay(c,B,an,d,pan,kind,behind){const L={snarl:.55,idle:1,chase:.9,roar:1.8}[kind]||1,k={snarl:.75,idle:.8,chase:.9,roar:1.1}[kind]||.8,t0=c.currentTime+.03;
+ const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=Math.max(700,(behind?2600:9000)/(1+d*.1));const g=c.createGain();g.gain.value=Math.min(1,1.3/(1+d*.3));lp.connect(g);
+ if(c.createStereoPanner){const pn=c.createStereoPanner();pn.pan.value=pan;g.connect(pn);pn.connect(B.m)}else g.connect(B.m);
+ const w=c.createGain();w.gain.value=Math.min(.5,.08+d*.02);g.connect(w);w.connect(B.sn);
+ (TVC[an]||TVC.def)(c,lp,t0,L,k)}
+function twSay(an,d,pan,kind,behind){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if($('mute').dataset.m||S!='play')return;if(!TWBUS||TWBUS.c!==ac)TWBUS=twBus(ac);twPlay(ac,TWBUS,an,d,pan,kind,behind)}catch(_){}}
+function tvSay(u,pd,kind){const t=performance.now();if(kind!='roar'&&t-twVT<600)return;twVT=t;TQi.copy(cam.quaternion).invert();TQ.copy(TV).sub(cam.position).applyQuaternion(TQi);const m=Math.hypot(TQ.x,TQ.z)||1;twSay(u.an||'pip',pd,Math.max(-1,Math.min(1,TQ.x/m*.95)),kind,TQ.z>0)}
+function twKill(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if($('mute').dataset.m)return;if(!TWBUS||TWBUS.c!==ac)TWBUS=twBus(ac);const c=ac,D=TWBUS.m,t0=c.currentTime+.02;
+ tvN(c,D,t0,.4,'bandpass',1100,.8,.5,{f1:180,att:.01});tvO(c,D,'sine',[[0,120],[1,36]],t0,.6,.5,{att:.01});tvN(c,D,t0+.12,.5,'bandpass',2600,1.4,.16,{f1:700,att:.02,am:46});tvO(c,tvFm(c,D,[380,900],6),'sawtooth',[[0,240],[1,90]],t0+.1,1.4,.12,{vib:[6,10]})}catch(_){}}
 function twUpd(t){const dtw=Math.min(.1,Math.max(.001,(t-(twLast||t))/1e3));twLast=t;
  for(let i=TWB.length-1;i>=0;i--){const b=TWB[i];let a=b,ok=false,vis=true;for(let n=0;n<6&&a;n++){if(a===sc){ok=true;break}if(a.visible===false)vis=false;a=a.parent}
   if(!ok){if(t-b.userData.born>4000)TWB.splice(i,1);continue}if(!vis)continue;if(b.rotation.order!='YXZ')b.rotation.order='YXZ';
@@ -1003,13 +1045,16 @@ function twUpd(t){const dtw=Math.min(.1,Math.max(.001,(t-(twLast||t))/1e3));twLa
   b.getWorldPosition(TV);let spd=0;if(u.lx!=null){const dd=Math.hypot(TV.x-u.lx,TV.z-u.lz);if(dd<3){spd=dd/dtw;u.str=(u.str||0)+dd}else u.str=0}u.lx=TV.x;u.lz=TV.z;u.sp=u.sp==null?spd:u.sp+(spd-u.sp)*Math.min(1,dtw*8);
   const pd=Math.hypot(TV.x-p.x/T,TV.z-p.y/T);
   if(u.str>=(u.sp>3.4?1.5:1.15)){u.str=0;if(S=='play'&&pd<18&&u.sp>.6)thud(pd,u.sp>3.4)}
+  if(S=='play'&&pd<28){const run=u.sp>3.4;if(u.vn==null)u.vn=t+2000+Math.random()*4000;
+   if(run&&!u.wr&&u.sp>3.6){u.wr=1;if(t-twRT>1500){twRT=t;tvSay(u,pd,'roar');u.vn=t+3000}}else if(!run&&u.sp<2.5)u.wr=0;
+   if(t>u.vn){tvSay(u,pd,run?'chase':'idle');u.vn=t+(run?1700+Math.random()*1700:4000+Math.random()*5000)}}
   const fl3=.8+.2*Math.sin(t/70+ph)+(Math.sin(t/410+ph)>.96?-.45:0);
   for(const h of u.halos){h.material.opacity=Math.max(.2,Math.min(1,.75*fl3+.2));const k2=.52+.1*Math.sin(t/130+ph)+(fl3<.5?.12:0);h.scale.set(k2,k2,k2)}
   u.eye.color.setRGB(1,.14+.16*fl3,.14+.08*fl3);
   if(u.hd){const tw2=Math.sin(t/37+ph)*Math.sin(t/910+ph*2);u.hd.rotation.z=(tw2>.72?(tw2-.72)*1.3:0)+Math.sin(t/600+ph)*.07;u.hd.rotation.x=Math.sin(t/1100+ph)*.05}
   if(u.tent)for(const q of u.tent){q.m.position.y=q.y0+.05*Math.sin(t/200+q.ph);q.m.position.x=q.x0+.07*Math.sin(t/330+q.ph);q.m.position.z=q.z0+.07*Math.cos(t/290+q.ph)}
   let rx=u.sp>3.4?.5:0,rz=0,sx=1,sy=1,sz=1,sw=1;u.ln=(u.ln||0)+(rx-(u.ln||0))*Math.min(1,dtw*7);rx=u.ln;
-  if(u.st=='idle'){if(t>u.nx){if(pd<20){const ks=['stretch','shake','flip','melt','flicker','twitch'];u.st=ks[Math.floor(Math.random()*ks.length)];u.t0=t;u.dur={stretch:450,shake:950,flip:700,melt:850,flicker:550,twitch:1100}[u.st];if(S=='play'&&pd<15)glitchSnd(pd)}else u.nx=t+2000}}
+  if(u.st=='idle'){if(t>u.nx){if(pd<20){const ks=['stretch','shake','flip','melt','flicker','twitch'];u.st=ks[Math.floor(Math.random()*ks.length)];u.t0=t;u.dur={stretch:450,shake:950,flip:700,melt:850,flicker:550,twitch:1100}[u.st];if(S=='play'&&pd<15){glitchSnd(pd);if(Math.random()<.6)tvSay(u,pd,'snarl')}}else u.nx=t+2000}}
   else{const k=Math.min(1,(t-u.t0)/u.dur),s2=Math.sin(k*Math.PI);
    if(u.st=='stretch'){sy=1+.7*s2;sx=sz=1-.28*s2}
    else if(u.st=='shake'){rz=Math.sin(t/22)*.24*s2;rx+=Math.sin(t/17)*.09*s2}
