@@ -176,7 +176,7 @@ body:has(#lob:not([hidden])) #bl{bottom:66px}
 <div id="hud">
  <div id="top"><div id="fl">FLOOR 1</div><div id="bar"><b id="b1">Intermission</b><span id="b2"></span></div><div id="prog"><i id="pf"></i></div><div id="pt"></div></div>
  <div id="bl"><div class="row"><div class="box" id="gr">0</div><div class="box" id="hr"></div></div><div class="row"><div class="box" id="stam"></div><div id="tsl"><i></i><i></i></div></div></div>
- <div id="ctl"><button id="chbtn" type="button">Chat (T)</button><button id="mute" type="button">Sound on</button><button id="swbtn" type="button">Swear: on</button><button id="bagbtn" type="button">Bag (I)</button><button id="svbtn" type="button" hidden>Admin panel</button></div>
+ <div id="ctl"><button id="chbtn" type="button">Chat (T)</button><button id="mute" type="button">Sound on</button><button id="bagbtn" type="button">Bag (I)</button><button id="svbtn" type="button" hidden>Admin panel</button></div>
 </div>
 <button id="fix" type="button">FIX</button><button id="run" type="button">RUN</button><button id="pick" type="button">PICK UP</button><button id="flt" type="button">DASH</button><button id="slb" type="button">SILVER</button><button id="sun" type="button">SUNSHINE</button><div id="slots" hidden><button id="s0" type="button"></button><button id="s1" type="button"></button><button id="s2" type="button"></button></div>
 <div id="chat"><div id="chl"></div><input id="chi" maxlength="120" autocomplete="off" placeholder="Chat (Enter to send, Esc to close)"></div>
@@ -965,7 +965,7 @@ let fd=null,ft=0;
 let death=null;const gorg=new THREE.Group(),goreP=[];sc.add(gorg);
 const GSPH=new THREE.SphereGeometry(1,6,5),GFEA=new THREE.BoxGeometry(.16,.015,.06),GRM=[0xb1121f,0x8a0a14,0xd01b2a].map(c=>new THREE.MeshBasicMaterial({color:c}));
 function clearGore(){while(gorg.children.length)gorg.remove(gorg.children[0]);goreP.length=0;death=null}
-function goreBurst(){clearGore();twKill();dthL=SWR()?DTH[Math.floor(Math.random()*DTH.length)]:null;const now=performance.now(),x=p.x/T,z=p.y/T,tp=TOONS.find(q=>q.id==sv.sel),fc=(tp&&tp.pal&&tp.pal.b)||0x4f8a3c;
+function goreBurst(){clearGore();twKill();const now=performance.now(),x=p.x/T,z=p.y/T,tp=TOONS.find(q=>q.id==sv.sel),fc=(tp&&tp.pal&&tp.pal.b)||0x4f8a3c;
  death={s:now,lt:now,sp:Array.from({length:16},()=>({x:Math.random(),y:Math.random()*.8,r:18+Math.random()*70,st:Math.random()*.35,dl:40+Math.random()*80,ph:Math.random()*6.28,dr:[0,1,2,3,4].map(()=>[Math.random()*6.28,1.1+Math.random()*.9,.1+Math.random()*.2])}))};
  for(let i=0;i<46;i++){const r=.04+Math.random()*.06,m=new THREE.Mesh(GSPH,GRM[i%3]),a=Math.random()*6.28,sp=1.5+Math.random()*4.5;m.scale.set(r,r,r);m.position.set(x,.4+Math.random()*.8,z);gorg.add(m);goreP.push({m,vx:Math.cos(a)*sp,vy:2+Math.random()*5,vz:Math.sin(a)*sp,r,k:0})}
  for(let i=0;i<24;i++){const m=new THREE.Mesh(GFEA,new THREE.MeshBasicMaterial({color:i%3?fc:0xf1ede0,side:THREE.DoubleSide})),a=Math.random()*6.28,sp=.8+Math.random()*2.6;m.scale.set(1.4,1,1.4);m.position.set(x,.5+Math.random()*.9,z);m.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);gorg.add(m);goreP.push({m,vx:Math.cos(a)*sp,vy:1.5+Math.random()*3.5,vz:Math.sin(a)*sp,k:1,rx:(Math.random()-.5)*9,rz:(Math.random()-.5)*9})}
@@ -981,7 +981,6 @@ function drawDeath(){if(!death)return;const age=(performance.now()-death.s)/1e3;
   for(const[aa,dd,rr]of q.dr){ox.beginPath();ox.arc(x+Math.cos(aa)*r*dd,y+Math.sin(aa)*r*dd,r*rr,0,7);ox.fill()}
   const dl=Math.max(0,age-q.st-.15)*q.dl,w=Math.max(3,r*.14);ox.fillRect(x-w/2,y,w,dl);ox.beginPath();ox.arc(x,y+dl,w/2,0,7);ox.fill();
   ox.fillStyle='rgba(255,130,130,.2)';ox.beginPath();ox.arc(x-r*.3,y-r*.3,r*.25,0,7);ox.fill()});
- if(dthL&&age>.7){const fs=Math.max(22,Math.min(vw*.07,vh*.09))|0,tx=dthL.toUpperCase()+'!';ox.globalAlpha=Math.min(1,(age-.7)/.4);ox.font='900 '+fs+'px system-ui,sans-serif';ox.textAlign='center';ox.textBaseline='middle';ox.lineJoin='round';ox.lineWidth=fs*.16;ox.strokeStyle='#1a0003';ox.fillStyle='#ff4a4a';ox.strokeText(tx,vw/2,vh*.42,vw*.92);ox.fillText(tx,vw/2,vh*.42,vw*.92)}
  ox.restore()}
 
 /* ---------- scarier twisteds ---------- */
@@ -1038,23 +1037,6 @@ function twSay(an,d,pan,kind,behind){try{ac=ac||new(window.AudioContext||window.
 function tvSay(u,pd,kind){const t=performance.now();if(kind!='roar'&&t-twVT<600)return;twVT=t;TQi.copy(cam.quaternion).invert();TQ.copy(TV).sub(cam.position).applyQuaternion(TQi);const m=Math.hypot(TQ.x,TQ.z)||1;twSay(u.an||'pip',pd,Math.max(-1,Math.min(1,TQ.x/m*.95)),kind,TQ.z>0)}
 function twKill(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if($('mute').dataset.m)return;if(!TWBUS||TWBUS.c!==ac)TWBUS=twBus(ac);const c=ac,D=TWBUS.m,t0=c.currentTime+.02;
  tvN(c,D,t0,.4,'bandpass',1100,.8,.5,{f1:180,att:.01});tvO(c,D,'sine',[[0,120],[1,36]],t0,.6,.5,{att:.01});tvN(c,D,t0+.12,.5,'bandpass',2600,1.4,.16,{f1:700,att:.02,am:46});tvO(c,tvFm(c,D,[380,900],6),'sawtooth',[[0,240],[1,90]],t0+.1,1.4,.12,{vib:[6,10]})}catch(_){}}
-/* ---------- swearing (toggle) + twisted taunts ---------- */
-const SWR=()=>!sv||sv.swr!==0;let dthL=null;const TAUNT=[];
-const TNT={any:["GET OVER HERE, ASSHOLE!","I'M GONNA FUCKING EAT YOU!","STAND STILL, YOU LITTLE SHIT!","NOWHERE TO RUN, DUMBASS!","YOUR ASS IS MINE!","COME HERE, YOU FUCKER!","I'LL RIP YOUR WINGS OFF, DAMN IT!","HOLY SHIT, YOU'RE SLOW!","DON'T YOU DARE RUN FROM ME!","YOU'RE FUCKED NOW!","WHERE THE HELL DO YOU THINK YOU'RE GOING?"],
- pip:["THE WEB'S GONNA FUCK YOU UP!","STUCK, ASSHOLE!"],lov:["AWOOO, FUCK YOU!","I'LL HUNT YOUR ASS DOWN!"],lut:["BLIND? NO, YOU'RE JUST DUMB AS SHIT!","SQUEAK THIS, ASSHOLE!"],lem:["HISS! GET FUCKED!","NINE LIVES? YOU GOT ZERO, DUMBASS!"],slv:["SSSSHIT, YOU'RE DEAD!","SSSSTOP RUNNING, ASSHOLE!"],lgt:["STING YOU, MOTHERFUCKER!","CLACK CLACK, YOU'RE SCREWED!"],mrc:["EIGHT ARMS TO KICK YOUR ASS!","GLUB GLUB, YOU'RE FUCKED!"],snw:["OH DEER, YOU'RE SCREWED!","YOU'RE ROADKILL, ASSHOLE!"]};
-const DTH=["Your ass got eaten","You got fucked up","Dead as shit","Eaten like a dumbass","Well, shit. You died","Torn apart, you idiot","Fucking eaten"];
-function tnt(b,u,pd,force){if(!SWR()||S!='play'||pd>24)return;const t=performance.now();if(t<(u.tn||0))return;if(!force&&Math.random()<.55)return;u.tn=t+6500+Math.random()*3500;const a=TNT[u.an],l=a&&Math.random()<.5?a:TNT.any,tx=l[Math.floor(Math.random()*l.length)];
- for(let i=TAUNT.length-1;i>=0;i--)if(TAUNT[i].b===b)TAUNT.splice(i,1);TAUNT.push({b,tx,t0:t,d:2700})}
-function drawTaunts(t){if(!TAUNT.length)return;if(S!='play'||!SWR()){TAUNT.length=0;return}
- const fs=Math.max(13,Math.min(20,vh*.03))|0,mw=fs*14,hd=$('top'),hb=hd&&hd.offsetParent?Math.min(vh*.4,Math.max(0,hd.getBoundingClientRect().bottom))+4:6;ox.save();ox.font='800 '+fs+'px system-ui,sans-serif';ox.textAlign='center';ox.textBaseline='middle';
- for(let i=TAUNT.length-1;i>=0;i--){const q=TAUNT[i],k=(t-q.t0)/q.d;if(k>=1){TAUNT.splice(i,1);continue}
-  q.b.getWorldPosition(TQ);TQ.y+=2.05;TQ.project(cam);if(TQ.z>1)continue;let sx=(TQ.x*.5+.5)*vw,sy=(-TQ.y*.5+.5)*vh;
-  let ls=[q.tx];if(ox.measureText(q.tx).width>mw){const w=q.tx.split(' ');let best=1,bd=1e9;for(let j=1;j<w.length;j++){const d=Math.abs(ox.measureText(w.slice(0,j).join(' ')).width-ox.measureText(w.slice(j).join(' ')).width);if(d<bd){bd=d;best=j}}ls=[w.slice(0,best).join(' '),w.slice(best).join(' ')]}
-  let lw=0;for(const l of ls)lw=Math.max(lw,ox.measureText(l).width);const bw=lw+fs*1.3,bh=ls.length*fs*1.25+fs*.9,bx=Math.max(6,Math.min(vw-bw-6,sx-bw/2))+Math.sin(t/38+i)*1.2,by=Math.max(hb,sy-bh-fs*.9);
-  const a=k<.08?k/.08:k>.85?(1-k)/.15:1;ox.globalAlpha=a*.95;rrect(ox,bx,by,bw,bh,fs*.5);ox.fillStyle='#17060a';ox.fill();ox.lineWidth=2.5;ox.strokeStyle='#ff3b3b';ox.stroke();
-  const tx=Math.max(bx+fs,Math.min(bx+bw-fs,sx));ox.beginPath();ox.moveTo(tx-fs*.5,by+bh-1);ox.lineTo(tx,Math.min(sy,by+bh+fs*.8));ox.lineTo(tx+fs*.5,by+bh-1);ox.fillStyle='#17060a';ox.fill();ox.strokeStyle='#ff3b3b';ox.stroke();
-  ox.fillStyle='#ffdede';ls.forEach((l,j)=>ox.fillText(l,bx+bw/2,by+fs*.45+fs*.62+j*fs*1.25))}
- ox.restore()}
 function twUpd(t){const dtw=Math.min(.1,Math.max(.001,(t-(twLast||t))/1e3));twLast=t;
  for(let i=TWB.length-1;i>=0;i--){const b=TWB[i];let a=b,ok=false,vis=true;for(let n=0;n<6&&a;n++){if(a===sc){ok=true;break}if(a.visible===false)vis=false;a=a.parent}
   if(!ok){if(t-b.userData.born>4000)TWB.splice(i,1);continue}if(!vis)continue;if(b.rotation.order!='YXZ')b.rotation.order='YXZ';
@@ -1064,15 +1046,15 @@ function twUpd(t){const dtw=Math.min(.1,Math.max(.001,(t-(twLast||t))/1e3));twLa
   const pd=Math.hypot(TV.x-p.x/T,TV.z-p.y/T);
   if(u.str>=(u.sp>3.4?1.5:1.15)){u.str=0;if(S=='play'&&pd<18&&u.sp>.6)thud(pd,u.sp>3.4)}
   if(S=='play'&&pd<28){const run=u.sp>3.4;if(u.vn==null)u.vn=t+2000+Math.random()*4000;
-   if(run&&!u.wr&&u.sp>3.6){u.wr=1;if(t-twRT>1500){twRT=t;tvSay(u,pd,'roar');tnt(b,u,pd,1);u.vn=t+3000}}else if(!run&&u.sp<2.5)u.wr=0;
-   if(t>u.vn){tvSay(u,pd,run?'chase':'idle');if(run)tnt(b,u,pd,0);u.vn=t+(run?1700+Math.random()*1700:4000+Math.random()*5000)}}
+   if(run&&!u.wr&&u.sp>3.6){u.wr=1;if(t-twRT>1500){twRT=t;tvSay(u,pd,'roar');u.vn=t+3000}}else if(!run&&u.sp<2.5)u.wr=0;
+   if(t>u.vn){tvSay(u,pd,run?'chase':'idle');u.vn=t+(run?1700+Math.random()*1700:4000+Math.random()*5000)}}
   const fl3=.8+.2*Math.sin(t/70+ph)+(Math.sin(t/410+ph)>.96?-.45:0);
   for(const h of u.halos){h.material.opacity=Math.max(.2,Math.min(1,.75*fl3+.2));const k2=.52+.1*Math.sin(t/130+ph)+(fl3<.5?.12:0);h.scale.set(k2,k2,k2)}
   u.eye.color.setRGB(1,.14+.16*fl3,.14+.08*fl3);
   if(u.hd){const tw2=Math.sin(t/37+ph)*Math.sin(t/910+ph*2);u.hd.rotation.z=(tw2>.72?(tw2-.72)*1.3:0)+Math.sin(t/600+ph)*.07;u.hd.rotation.x=Math.sin(t/1100+ph)*.05}
   if(u.tent)for(const q of u.tent){q.m.position.y=q.y0+.05*Math.sin(t/200+q.ph);q.m.position.x=q.x0+.07*Math.sin(t/330+q.ph);q.m.position.z=q.z0+.07*Math.cos(t/290+q.ph)}
   let rx=u.sp>3.4?.5:0,rz=0,sx=1,sy=1,sz=1,sw=1;u.ln=(u.ln||0)+(rx-(u.ln||0))*Math.min(1,dtw*7);rx=u.ln;
-  if(u.st=='idle'){if(t>u.nx){if(pd<20){const ks=['stretch','shake','flip','melt','flicker','twitch'];u.st=ks[Math.floor(Math.random()*ks.length)];u.t0=t;u.dur={stretch:450,shake:950,flip:700,melt:850,flicker:550,twitch:1100}[u.st];if(S=='play'&&pd<15){glitchSnd(pd);{if(Math.random()<.6)tvSay(u,pd,'snarl');if(pd<10)tnt(b,u,pd,0)}}}else u.nx=t+2000}}
+  if(u.st=='idle'){if(t>u.nx){if(pd<20){const ks=['stretch','shake','flip','melt','flicker','twitch'];u.st=ks[Math.floor(Math.random()*ks.length)];u.t0=t;u.dur={stretch:450,shake:950,flip:700,melt:850,flicker:550,twitch:1100}[u.st];if(S=='play'&&pd<15){glitchSnd(pd);if(Math.random()<.6)tvSay(u,pd,'snarl')}}else u.nx=t+2000}}
   else{const k=Math.min(1,(t-u.t0)/u.dur),s2=Math.sin(k*Math.PI);
    if(u.st=='stretch'){sy=1+.7*s2;sx=sz=1-.28*s2}
    else if(u.st=='shake'){rz=Math.sin(t/22)*.24*s2;rx+=Math.sin(t/17)*.09*s2}
@@ -1148,7 +1130,7 @@ function chkLv(){const c=chk;if(c.k=='bar'){const d=Math.abs(c.u-c.zc);return d<
 function endChk(lv){const c=chk;if(!rep){chk=null;return}
  if(lv==2){rep.p+=.13;beep(1100,.12,'triangle');fbk={txt:'Great job!',col:'#ffcf4a',s:performance.now()}}
  else if(lv==1){rep.p+=.07;beep(700,.1,'triangle');fbk={txt:'Good job',col:'#cfd3dc',s:performance.now()}}
- else{rep.p=Math.max(0,rep.p-.12);sh=6;al=3;beep(110,.3,'sawtooth');e.stun=0;fbk={txt:SWR()?['Shit!','Fuck!','Dammit!'][Math.floor(Math.random()*3)]:'Missed!',col:'#ff6b6b',s:performance.now()}}
+ else{rep.p=Math.max(0,rep.p-.12);sh=6;al=3;beep(110,.3,'sawtooth');e.stun=0;fbk={txt:'Missed!',col:'#ff6b6b',s:performance.now()}}
  if(c.k=='jump'){c.end=.55;c.lv=lv;return}
  chk=null;rt=R(1.4,2.4);if(rep.p>=1)fin(rep)}
 function chkTap(){const c=chk;if(!c||c.end>0)return;
@@ -1220,7 +1202,7 @@ function step(dt){
  if(al>0)al-=dt;slvStep(dt);if(sunT>0)sunT-=dt;if(sunC>0)sunC-=dt;if(pan>0)pan-=dt;if(boost>0)boost-=dt;if(fl2>0)fl2-=dt;if(flC>0)flC-=dt;{const pn=al>0;if(sv.sel=='lem'&&pn&&!lemP&&lemC<=0&&S=='play'){p.st=Math.min(p.mx,p.st+p.mx*.5);if(p.ex&&p.st>2.5)p.ex=false;lemC=12;toast('Panic Gulp! Stamina back')}lemP=pn;if(lemC>0)lemC-=dt}
  for(const c of caps)if(!c.d&&Math.hypot(c.x-p.x,c.y-p.y)<T*.7){c.d=true;c.m.visible=false;{const sd=hasT('pch')?3:2;bank+=sd;sv.res=(sv.res||0)+1;save();toast('+'+sd+' bird seeds · +1 research')};beep(1500,.12,'triangle')}
  if(lift.arr&&Math.hypot(lift.x-p.x,lift.y-p.y)>T*4)lift.arr=false;
- if(lift.open){lift.t-=dt;if(lift.t<=0){over(SWR()?'Out of fucking time':'Out of time');return}}
+ if(lift.open){lift.t-=dt;if(lift.t<=0){over('Out of time');return}}
  const loud=((run||fixNow)&&Math.hypot(e.x-p.x,e.y-p.y)<T*(fixNow?5:6)*(fixNow?1:ST.quiet))||al>0;
  let Q=p,lq=loud;if(RM&&isHost){let bd=Math.hypot(p.x-e.x,p.y-e.y);for(const r of rem){const dd=Math.hypot(r.x-e.x,r.y-e.y);if(dd<bd){bd=dd;Q=r;lq=r.ld}}}
  if(RM&&!isHost)syncE(dt);else if(e.stun>0)e.stun-=dt;else{
@@ -1266,7 +1248,7 @@ function step(dt){
  if(lift.open&&Math.abs(lift.x-p.x)<T*3&&Math.abs(lift.y-p.y)<T*1.6){if(fl>=500){win();return}fl++;bank+=10;if(sv.sel=='pip'&&fl>=10&&!sv.pq10){sv.pq10=1;setTimeout(()=>toast('Quest complete: reached floor 10 as Puffy!'),700)}save();toast("+10 bird seeds");try{if(fl>best)localStorage.setItem('pp',fl)}catch(_){}best=Math.max(best,fl);beep(660,.3,'triangle');build();S='inter';it=2.2}
 }
 function win(){droneOff();S='menu';best=500;try{localStorage.setItem('pp',500)}catch(_){}bank+=500;save();$('msg').textContent='You beat floor 500 and escaped the factory! 500 bonus seeds added.';toTitle();fl=1}
-function over(w){droneOff();S='menu';$('msg').textContent=(w||(SWR()&&dthL?dthL:'Caught'))+' on floor '+fl+'. Best: floor '+best+'. Spend your seeds in the lobby, then ride again.';toTitle();fl=1;dthL=null}
+function over(w){droneOff();S='menu';$('msg').textContent=(w||'Caught')+' on floor '+fl+'. Best: floor '+best+'. Spend your seeds in the lobby, then ride again.';toTitle();fl=1}
 function lobby(){hp=maxhp();$('bank').textContent='Seeds in the bank: '+bank;
  const c1=30+20*up.h,c2=20+15*up.s,u1=$('u1'),u2=$('u2');
  u1.textContent='Extra heart ('+up.h+'/3) – '+c1+' seeds';u1.disabled=up.h>=3||bank<c1;
@@ -1628,7 +1610,7 @@ function render(t){
  for(const m of ms){if(m.d||m.p<=0)continue;const[sx,sy]=scr(m.x,m.y,1.7);ox.fillStyle='rgba(0,0,0,.65)';ox.fillRect(sx-24,sy,48,7);ox.fillStyle='#ffcf4a';ox.fillRect(sx-24,sy,48*Math.min(1,m.p),7)}
  if(S=='play'&&(chk||fbk))drawChk();
  if(S=='play')drawBubbles();
- drawScare();drawDeath();drawTaunts(t);slAimDraw();fpDraw();mmDraw();
+ drawScare();drawDeath();slAimDraw();fpDraw();mmDraw();
 }
 let mmC=null,mmG=null,mmOn=true;
 function mmDraw(){try{if(S!='play'||!mmOn||!g||!ms)return;if(mmG!==g){mmG=g;mmC=document.createElement('canvas');mmC.width=W;mmC.height=H}
@@ -1705,7 +1687,6 @@ $('adm').addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b
 
 $('svbtn').onclick=svOpen;$('svx').onclick=()=>{$('svm').hidden=true};$('svl').onclick=svLoad;
 $('svc').onclick=()=>{const t=$('svt');t.focus();t.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}try{if(!ok&&navigator.clipboard)navigator.clipboard.writeText(t.value)}catch(_){}$('svmsg').textContent='Code selected. Copy it if it did not copy by itself.'};
-$('swbtn').textContent=SWR()?'Swear: on':'Swear: off';$('swbtn').onclick=()=>{sv.swr=SWR()?0:1;save();$('swbtn').textContent=SWR()?'Swear: on':'Swear: off';if(!SWR())TAUNT.length=0};
 $('mute').onclick=ev=>{const b=ev.currentTarget;if(b.dataset.m){delete b.dataset.m;b.textContent='Sound on'}else{b.dataset.m=1;b.textContent='Sound off'}if(dr)dr.g.gain.value=b.dataset.m?0:.018};
 addEventListener('keydown',ev=>{if(ev.target&&/^(INPUT|TEXTAREA)$/.test(ev.target.tagName))return;if(ev.code=='KeyG'&&!ev.repeat){doFlutter();doSilver();doSunshine()}if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(ev.code))ev.preventDefault();k[ev.code]=true;if(!ev.repeat&&S=='play'&&ev.code.slice(0,5)=='Digit')useItem(+ev.code.slice(5)-1);if(!ev.repeat&&(ev.code=='KeyE'||ev.code=='Space')){if(S=='play')act=true;else if(S=='read')closeNote()}});
 addEventListener('keyup',ev=>{if(ev.target&&/^(INPUT|TEXTAREA)$/.test(ev.target.tagName))return;k[ev.code]=false});
@@ -1722,10 +1703,8 @@ oc.addEventListener('pointermove',ev=>{if(ev.pointerId===lid){ca-=(ev.clientX-lx
 const je=ev=>{if(ev.pointerId===lid)lid=null;if(ev.pointerId===jid){jid=null;joy.x=joy.y=0}};oc.addEventListener('pointerup',je);oc.addEventListener('pointercancel',je);
 (function(){let seen=0;try{seen=localStorage.getItem('ppwarn')}catch(_){}if(seen)return;
  const w=document.createElement('div');w.id='wrn';w.style.cssText='position:fixed;left:0;top:0;right:0;bottom:0;z-index:99;background:rgba(8,2,4,.95);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif';
- const bs='display:block;width:100%;margin-top:8px;padding:12px;border-radius:9px;font-weight:800;font-size:15px;border:2px solid #000;cursor:pointer;';
- w.innerHTML='<div style="max-width:420px;width:100%;background:#16090c;border:3px solid #c0262d;border-radius:14px;padding:22px 20px;color:#f4e6e6;text-align:center;box-shadow:0 0 40px rgba(200,20,30,.35)"><div style="font-size:44px;line-height:1">\u26a0\ufe0f</div><h2 style="margin:8px 0 10px;font-size:24px;letter-spacing:.04em;color:#ff5a5a">CONTENT WARNING</h2><p style="margin:0 0 8px;font-size:15px;line-height:1.45">This game has <b>strong language (swearing)</b>, <b>blood and gore</b>, and <b>scary creatures with creepy sounds</b>.</p><p style="margin:0 0 14px;font-size:14px;opacity:.8;line-height:1.4">Not for young kids or anyone who scares easily. Turn the volume down if you play at night.</p><button id="wrnY" type="button" style="'+bs+'background:#d8343b;color:#fff">I understand, continue</button><button id="wrnN" type="button" style="'+bs+'background:#2a2a32;color:#fff">Continue with swearing off</button></div>';
- document.body.appendChild(w);const done=()=>{try{localStorage.setItem('ppwarn','1')}catch(_){}w.remove()};
- w.querySelector('#wrnY').onclick=done;w.querySelector('#wrnN').onclick=()=>{sv.swr=0;save();$('swbtn').textContent='Swear: off';TAUNT.length=0;done()}})();
+ w.innerHTML='<div style="max-width:420px;width:100%;background:#16090c;border:3px solid #c0262d;border-radius:14px;padding:22px 20px;color:#f4e6e6;text-align:center;box-shadow:0 0 40px rgba(200,20,30,.35)"><div style="font-size:44px;line-height:1">\u26a0\ufe0f</div><h2 style="margin:8px 0 10px;font-size:24px;letter-spacing:.04em;color:#ff5a5a">CONTENT WARNING</h2><p style="margin:0 0 8px;font-size:15px;line-height:1.45">This game has <b>blood and gore</b> and <b>scary creatures with creepy sounds</b>.</p><p style="margin:0 0 14px;font-size:14px;opacity:.8;line-height:1.4">Not for young kids or anyone who scares easily. Turn the volume down if you play at night.</p><button id="wrnY" type="button" style="display:block;width:100%;margin-top:8px;padding:12px;border-radius:9px;font-weight:800;font-size:15px;border:2px solid #000;cursor:pointer;background:#d8343b;color:#fff">I understand, continue</button></div>';
+ document.body.appendChild(w);w.querySelector('#wrnY').onclick=()=>{try{localStorage.setItem('ppwarn','1')}catch(_){}w.remove()}})();
 computeST();build();setToon();e.stun=1e9;$('bank').textContent='Seeds in the bank: '+bank;slots();requestAnimationFrame(loop);
 })();
 </script>
